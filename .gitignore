@@ -1,1 +1,5 @@
 config.js
+.agents/
+.claude/
+.mcp.json
+skills-lock.json

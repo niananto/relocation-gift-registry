@@ -263,35 +263,7 @@
         <p class="text-on-surface-variant text-sm md:text-base mb-7 leading-relaxed">
           Pick an item above, choose how you'd like to help, and I'll take care of the rest. Click any item to get started.
         </p>
-        <div class="space-y-4">
-          <div class="flex items-center gap-4 bg-white/70 rounded-xl p-4">
-            <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-              <span class="material-symbols-outlined text-primary">smartphone</span>
-            </div>
-            <div>
-              <p class="font-bold text-sm text-on-surface">bKash (Bangladesh)</p>
-              <p class="text-xs text-on-surface-variant">017XX-XXXXXX (Personal)</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-4 bg-white/70 rounded-xl p-4">
-            <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-              <span class="material-symbols-outlined text-primary">account_balance</span>
-            </div>
-            <div>
-              <p class="font-bold text-sm text-on-surface">ACH / Wire (USA)</p>
-              <p class="text-xs text-on-surface-variant">Chase Bank | Account ending in 4291</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-4 bg-white/70 rounded-xl p-4">
-            <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-              <span class="material-symbols-outlined text-primary">currency_exchange</span>
-            </div>
-            <div>
-              <p class="font-bold text-sm text-on-surface">NPSB / Bank Transfer</p>
-              <p class="text-xs text-on-surface-variant">Standard Chartered | Acc: 11223344556</p>
-            </div>
-          </div>
-        </div>
+        <div id="payment-methods-list" class="space-y-3"></div>
       </div>
 
       <!-- Shipping addresses -->
@@ -300,28 +272,7 @@
         <p class="text-on-surface-variant text-sm md:text-base mb-7 leading-relaxed">
           Prefer to buy and ship the item directly? Use whichever address is easier for you.
         </p>
-        <div class="space-y-4">
-          <div class="bg-white/70 rounded-xl p-5">
-            <div class="flex items-center gap-3 mb-3">
-              <span class="material-symbols-outlined text-primary text-base">apartment</span>
-              <p class="font-bold text-sm text-on-surface">Bangladesh</p>
-            </div>
-            <p class="text-sm text-on-surface-variant leading-relaxed">
-              House 42, Road 18, Block A<br>Banani, Dhaka 1213<br>
-              <span class="font-medium text-on-surface">Attn: Ananto (+880 1711-XXXXXX)</span>
-            </p>
-          </div>
-          <div class="bg-white/70 rounded-xl p-5">
-            <div class="flex items-center gap-3 mb-3">
-              <span class="material-symbols-outlined text-primary text-base">home_pin</span>
-              <p class="font-bold text-sm text-on-surface">Penn State, USA</p>
-            </div>
-            <p class="text-sm text-on-surface-variant leading-relaxed">
-              123 Graduate Circle, Apt 405<br>State College, PA 16801<br>
-              <span class="font-medium text-on-surface">United States</span>
-            </p>
-          </div>
-        </div>
+        <div id="shipping-addresses-list" class="space-y-4"></div>
       </div>
 
     </div>
@@ -416,22 +367,7 @@
       <!-- Step 2a: buy & ship -->
       <div id="modal-step-gift" class="hidden p-5">
         <p class="text-sm text-on-surface-variant mb-4">Ship to whichever address is easier for you:</p>
-        <div class="space-y-3 mb-5">
-          <div class="bg-surface-container rounded-xl p-4">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="material-symbols-outlined text-primary text-base">apartment</span>
-              <p class="text-xs font-bold uppercase tracking-wider text-on-surface">Bangladesh</p>
-            </div>
-            <p class="text-sm text-on-surface-variant leading-relaxed">House 42, Road 18, Block A<br>Banani, Dhaka 1213 — <span class="font-medium text-on-surface">Attn: Ananto</span></p>
-          </div>
-          <div class="bg-surface-container rounded-xl p-4">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="material-symbols-outlined text-primary text-base">home_pin</span>
-              <p class="text-xs font-bold uppercase tracking-wider text-on-surface">Penn State, USA</p>
-            </div>
-            <p class="text-sm text-on-surface-variant leading-relaxed">123 Graduate Circle, Apt 405<br>State College, PA 16801, United States</p>
-          </div>
-        </div>
+        <div id="modal-gift-addresses" class="space-y-3 mb-5"></div>
         <form id="gift-form" class="space-y-3" onsubmit="submitContribution(event,'gift')">
           <div>
             <label class="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Your Name</label>
@@ -453,20 +389,9 @@
 
       <!-- Step 2b: send money -->
       <div id="modal-step-money" class="hidden p-5">
-        <div class="bg-surface-container rounded-xl p-4 mb-4 space-y-3">
-          <p class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">Send via</p>
-          <div class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-primary">smartphone</span>
-            <div><p class="text-sm font-bold text-on-surface">bKash (Bangladesh)</p><p class="text-xs text-on-surface-variant">017XX-XXXXXX (Personal)</p></div>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-primary">account_balance</span>
-            <div><p class="text-sm font-bold text-on-surface">ACH / Wire (USA)</p><p class="text-xs text-on-surface-variant">Chase Bank | Account ending in 4291</p></div>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-primary">currency_exchange</span>
-            <div><p class="text-sm font-bold text-on-surface">NPSB / Bank Transfer</p><p class="text-xs text-on-surface-variant">Standard Chartered | Acc: 11223344556</p></div>
-          </div>
+        <div class="mb-4">
+          <p class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-3">Send via — tap for full details</p>
+          <div id="modal-payment-methods" class="space-y-2"></div>
         </div>
         <form id="money-form" class="space-y-3" onsubmit="submitContribution(event,'money')">
           <div class="grid grid-cols-2 gap-3">
@@ -521,6 +446,24 @@
   </div>
 </div>
 
+<!-- ── ACCOUNT DETAILS POPUP ── -->
+<div id="acct-overlay" class="hidden fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-4" onclick="closeAcct(event)">
+  <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+  <div class="relative bg-surface rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden">
+    <div class="flex items-center justify-between px-5 pt-5 pb-4 border-b border-outline-variant/20">
+      <div>
+        <p id="acct-label" class="font-bold text-on-surface text-base"></p>
+        <span id="acct-currency" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full mt-1 inline-block"></span>
+      </div>
+      <button onclick="closeAcct()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant text-xl">close</span>
+      </button>
+    </div>
+    <div id="acct-fields" class="px-5 py-4 space-y-3"></div>
+    <p id="acct-copy-toast" class="hidden text-center text-xs text-primary font-semibold pb-4">Copied!</p>
+  </div>
+</div>
+
 <script>
   const { createClient } = supabase;
   const db = createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
@@ -529,6 +472,148 @@
   let activeFilter = 'all';
   let modalItemId = null;
   let modalItemTitle = null;
+
+  const PAYMENT_METHODS = [
+    {
+      id: 'bkash', icon: 'smartphone', label: 'bKash', currency: 'BDT',
+      hint: '01675340238',
+      fields: [
+        { label: 'Number', value: '01675340238' },
+        { label: 'Type', value: 'Personal' },
+      ]
+    },
+    {
+      id: 'swift', icon: 'public', label: 'SWIFT / Wire', currency: 'USD',
+      hint: 'BRAC Bank · BRAKBDDH',
+      fields: [
+        { label: 'Account Name',   value: 'MD NAZMUL ISLAM ANANTO' },
+        { label: 'Account Number', value: '2071207410001' },
+        { label: 'Bank',           value: 'BRAC Bank PLC' },
+        { label: 'Branch',         value: 'DONIA BRANCH' },
+        { label: 'Routing',        value: '060271424' },
+        { label: 'SWIFT Code',     value: 'BRAKBDDH' },
+      ]
+    },
+    {
+      id: 'ach', icon: 'account_balance', label: 'ACH / Wire', currency: 'USD',
+      hint: 'Regent Bank · ABA 103913434',
+      fields: [
+        { label: 'Account Name',   value: 'Md. Nazmul Islam Ananto' },
+        { label: 'Account Number', value: '111049312425' },
+        { label: 'ABA Routing',    value: '103913434' },
+        { label: 'Bank',           value: 'Regent Bank' },
+        { label: 'Account Type',   value: 'Checking' },
+      ]
+    },
+    {
+      id: 'npsb', icon: 'currency_exchange', label: 'NPSB / Bank Transfer', currency: 'BDT',
+      hint: 'BRAC Bank · Acc: 1071207410001',
+      fields: [
+        { label: 'Account Name',   value: 'MD NAZMUL ISLAM ANANTO' },
+        { label: 'Account Number', value: '1071207410001' },
+        { label: 'Bank',           value: 'BRAC Bank PLC' },
+        { label: 'Branch',         value: 'DONIA BRANCH' },
+        { label: 'Routing',        value: '060271424' },
+        { label: 'SWIFT Code',     value: 'BRAKBDDH' },
+      ]
+    },
+  ];
+
+  function currencyBadge(currency) {
+    const cls = currency === 'USD'
+      ? 'bg-green-100 text-green-800'
+      : 'bg-orange-100 text-orange-800';
+    return `<span class="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${cls}">${currency}</span>`;
+  }
+
+  function renderPaymentMethodCards(containerId, compact = false) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = PAYMENT_METHODS.map(m => `
+      <button onclick="openAcct('${m.id}')" class="w-full flex items-center gap-3 ${compact ? 'bg-surface-container-low' : 'bg-white/70'} rounded-xl p-3.5 hover:bg-primary-fixed/30 transition-all text-left group">
+        <div class="w-9 h-9 bg-white rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
+          <span class="material-symbols-outlined text-primary text-[18px]">${m.icon}</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2">
+            <p class="font-bold text-sm text-on-surface">${m.label}</p>
+            ${currencyBadge(m.currency)}
+          </div>
+          <p class="text-xs text-on-surface-variant truncate">${m.hint}</p>
+        </div>
+        <span class="material-symbols-outlined text-on-surface-variant/40 text-base group-hover:text-primary transition-colors">chevron_right</span>
+      </button>`).join('');
+  }
+
+  function renderShippingAddresses() {
+    const bd = (window.BD_MAILING_ADDRESS || '').replace(/\n/g, '<br>');
+    const us = (window.US_MAILING_ADDRESS || '').replace(/\n/g, '<br>');
+    const html = `
+      <div class="bg-white/70 rounded-xl p-5">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="material-symbols-outlined text-primary text-base">apartment</span>
+          <p class="font-bold text-sm text-on-surface">Bangladesh</p>
+        </div>
+        <p class="text-sm text-on-surface-variant leading-relaxed">${bd || 'Address not configured'}</p>
+      </div>
+      <div class="bg-white/70 rounded-xl p-5">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="material-symbols-outlined text-primary text-base">home_pin</span>
+          <p class="font-bold text-sm text-on-surface">Penn State, USA</p>
+        </div>
+        <p class="text-sm text-on-surface-variant leading-relaxed">${us || 'Address not configured'}</p>
+      </div>`;
+    ['shipping-addresses-list', 'modal-gift-addresses'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = html;
+    });
+  }
+
+  function openAcct(id) {
+    const m = PAYMENT_METHODS.find(x => x.id === id);
+    if (!m) return;
+    document.getElementById('acct-label').textContent = m.label;
+    const badge = document.getElementById('acct-currency');
+    badge.textContent = m.currency;
+    badge.className = `text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full mt-1 inline-block ${m.currency === 'USD' ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800'}`;
+    document.getElementById('acct-fields').innerHTML = m.fields.map(f => `
+      <div class="flex items-center justify-between gap-3">
+        <div>
+          <p class="text-[10px] uppercase tracking-wider font-bold text-on-surface-variant">${f.label}</p>
+          <p class="text-sm font-medium text-on-surface mt-0.5">${f.value}</p>
+        </div>
+        <button onclick="copyField('${f.value.replace(/'/g, "\\'")}')" class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg hover:bg-surface-container transition-colors" title="Copy">
+          <span class="material-symbols-outlined text-on-surface-variant text-[18px]">content_copy</span>
+        </button>
+      </div>`).join('');
+    document.getElementById('acct-copy-toast').classList.add('hidden');
+    document.getElementById('acct-overlay').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeAcct(e) {
+    if (e && e.target !== document.getElementById('acct-overlay') && !e.target.classList.contains('absolute')) return;
+    document.getElementById('acct-overlay').classList.add('hidden');
+    // only restore scroll if main modal is also closed
+    if (document.getElementById('modal-overlay').classList.contains('hidden')) {
+      document.body.style.overflow = '';
+    }
+  }
+
+  let _copyToast;
+  function copyField(val) {
+    navigator.clipboard.writeText(val).then(() => {
+      const toast = document.getElementById('acct-copy-toast');
+      toast.classList.remove('hidden');
+      clearTimeout(_copyToast);
+      _copyToast = setTimeout(() => toast.classList.add('hidden'), 1500);
+    });
+  }
+
+  // Initialise static UI
+  renderPaymentMethodCards('payment-methods-list');
+  renderPaymentMethodCards('modal-payment-methods', true);
+  renderShippingAddresses();
 
   // ── Load & render items ──
   async function loadItems() {
