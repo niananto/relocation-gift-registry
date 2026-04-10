@@ -154,12 +154,12 @@
       </div>
 
       <!-- Shipping addresses -->
-      <div>
+      <div class="flex flex-col">
         <h2 class="text-2xl md:text-3xl font-serif text-on-surface mb-3">Shipping Addresses</h2>
         <p class="text-on-surface-variant text-sm md:text-base mb-7 leading-relaxed">
           Prefer to buy and ship the item directly? Use whichever address is easier for you.
         </p>
-        <div id="shipping-addresses-list" class="space-y-4"></div>
+        <div id="shipping-addresses-list" class="flex flex-col flex-1 gap-4"></div>
       </div>
 
     </div>
@@ -436,14 +436,14 @@
     const bd = (window.BD_MAILING_ADDRESS || '').replace(/\n/g, '<br>');
     const us = (window.US_MAILING_ADDRESS || '').replace(/\n/g, '<br>');
     const html = `
-      <div class="bg-white/70 rounded-xl p-5">
+      <div class="flex-1 bg-white/70 rounded-xl p-5">
         <div class="flex items-center gap-3 mb-3">
           <span class="material-symbols-outlined text-primary text-base">apartment</span>
           <p class="font-bold text-sm text-on-surface">Bangladesh</p>
         </div>
         <p class="text-sm text-on-surface-variant leading-relaxed">${bd || 'Address not configured'}</p>
       </div>
-      <div class="bg-white/70 rounded-xl p-5">
+      <div class="flex-1 bg-white/70 rounded-xl p-5">
         <div class="flex items-center gap-3 mb-3">
           <span class="material-symbols-outlined text-primary text-base">home_pin</span>
           <p class="font-bold text-sm text-on-surface">Penn State, USA</p>
