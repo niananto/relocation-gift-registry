@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gift Management — Moving to the States!</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode:"class",
+    theme:{extend:{
+      colors:{
+        "on-secondary-fixed":"#121f0b","surface-bright":"#fff8f5","on-secondary-fixed-variant":"#3d4b34",
+        "tertiary-fixed-dim":"#d6c4a7","surface-container-low":"#fcf2ec","secondary-container":"#d7e8c8",
+        "primary":"#93452d","on-error":"#ffffff","on-primary-fixed":"#3a0a00","on-secondary":"#ffffff",
+        "surface-container-lowest":"#ffffff","on-background":"#1f1b18","error-container":"#ffdad6",
+        "on-tertiary-fixed-variant":"#51452f","on-primary-fixed-variant":"#78301a","error":"#ba1a1a",
+        "background":"#fff8f5","surface-dim":"#e1d8d3","outline-variant":"#dac1ba","surface-tint":"#96472f",
+        "primary-fixed":"#ffdbd1","tertiary":"#685a42","surface-container-high":"#f0e6e1","surface":"#fff8f5",
+        "tertiary-fixed":"#f3e0c2","on-tertiary-fixed":"#241a07","surface-container":"#f6ece6",
+        "on-primary-container":"#fffbff","on-surface-variant":"#55433e","inverse-primary":"#ffb59f",
+        "surface-variant":"#eae1db","secondary-fixed-dim":"#bbccad","on-tertiary-container":"#fffbff",
+        "surface-container-highest":"#eae1db","inverse-on-surface":"#f9efe9","secondary-fixed":"#d7e8c8",
+        "outline":"#88726d","on-error-container":"#93000a","inverse-surface":"#342f2c","secondary":"#54634a",
+        "tertiary-container":"#817359","on-tertiary":"#ffffff","primary-container":"#b25c43",
+        "on-secondary-container":"#5a6950","on-primary":"#ffffff","on-surface":"#1f1b18","primary-fixed-dim":"#ffb59f"
+      },
+      borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},
+      fontFamily:{"headline":["Noto Serif"],"body":["Plus Jakarta Sans"],"label":["Plus Jakarta Sans"]}
+    }}
+  }
+</script>
+<style>
+  body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  h1,h2,h3,.serif { font-family: 'Noto Serif', serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-track{background:#fff8f5} ::-webkit-scrollbar-thumb{background:#dac1ba;border-radius:10px}
+  .hide-scrollbar::-webkit-scrollbar{display:none} .hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+  .filter-tab.active { color: #93452d; border-bottom: 2px solid #93452d; }
+  tr.deleting { animation: fadeOut .3s ease forwards; }
+  @keyframes fadeOut { to { opacity:0; transform: translateX(8px); } }
+</style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+
+<!-- ── MOBILE HEADER (hidden on md+) ── -->
+<header class="md:hidden fixed top-0 w-full z-50 bg-[#f4ede7] border-b border-outline-variant/20 flex items-center justify-between px-5 h-14">
+  <div class="flex items-center gap-3">
+    <span class="material-symbols-outlined text-primary cursor-pointer" onclick="toggleMobileSidebar()">menu</span>
+    <span class="font-serif text-base font-bold text-orange-900">Registry Admin</span>
+  </div>
+  <img src="https://github.com/niananto/academics/blob/gh-pages/images/ananto_dp_5.jpg?raw=true" class="w-8 h-8 rounded-full object-cover border border-white shadow-sm" alt="Ananto"/>
+</header>
+
+<!-- ── MOBILE SIDEBAR OVERLAY ── -->
+<div id="mobile-sidebar-overlay" class="md:hidden hidden fixed inset-0 bg-black/30 z-40 backdrop-blur-sm" onclick="toggleMobileSidebar()"></div>
+
+<!-- ── SIDEBAR (fixed desktop / slide-in mobile) ── -->
+<aside id="sidebar" class="fixed left-0 top-0 h-full flex flex-col p-6 space-y-4 bg-stone-100 w-64 z-50 transition-transform duration-300 -translate-x-full md:translate-x-0">
+  <div class="mb-6 px-2">
+    <h1 class="text-lg font-serif text-orange-900">Moving to the States!</h1>
+    <p class="text-[10px] uppercase tracking-[0.2em] text-on-surface-variant/60 font-medium mt-1">Registry Admin</p>
+  </div>
+  <div class="flex items-center gap-3 mb-6 px-3 py-3 bg-surface-container-low rounded-xl">
+    <img alt="Ananto" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm flex-shrink-0"
+      src="https://github.com/niananto/academics/blob/gh-pages/images/ananto_dp_5.jpg?raw=true"/>
+    <div class="min-w-0">
+      <p class="text-lg font-serif italic text-orange-900 leading-tight" id="greeting-text"
+        style="transition: opacity 0.35s ease, transform 0.35s ease;">Hi,</p>
+      <p class="text-[11px] font-semibold tracking-wide text-on-surface-variant/70 uppercase">Ananto</p>
+    </div>
+  </div>
+  <nav class="flex-1 flex flex-col">
+    <div class="space-y-1">
+      <button id="sidebar-inventory" onclick="switchView('inventory')"
+        class="w-full flex items-center space-x-3 px-4 py-3 bg-white text-orange-900 rounded-lg font-bold shadow-sm text-left transition-all">
+        <span class="material-symbols-outlined">featured_play_list</span><span class="text-sm">Inventory</span>
+      </button>
+      <button id="sidebar-contributions" onclick="switchView('contributions')"
+        class="w-full flex items-center space-x-3 px-4 py-3 text-stone-600 hover:bg-stone-200/50 rounded-lg transition-all text-left">
+        <span class="material-symbols-outlined">payments</span><span class="text-sm">Contributions</span>
+      </button>
+      <button id="sidebar-add-new" onclick="switchView('add-new')"
+        class="w-full flex items-center space-x-3 px-4 py-3 text-stone-600 hover:bg-stone-200/50 rounded-lg transition-all text-left">
+        <span class="material-symbols-outlined">add_circle</span><span class="text-sm">Add New Gift</span>
+      </button>
+    </div>
+    <div class="border-t border-outline-variant/20 my-3"></div>
+    <div class="space-y-1">
+      <a class="flex items-center space-x-3 px-4 py-3 text-stone-600 hover:bg-stone-200/50 rounded-lg transition-all" href="#">
+        <span class="material-symbols-outlined">settings</span><span class="text-sm">Settings</span>
+      </a>
+      <button onclick="signOut()"
+        class="w-full flex items-center space-x-3 px-4 py-3 text-stone-600 hover:bg-stone-200/50 hover:text-error rounded-lg transition-all text-left">
+        <span class="material-symbols-outlined">logout</span><span class="text-sm">Sign Out</span>
+      </button>
+    </div>
+  </nav>
+  <a href="index.html" class="w-full py-3 px-4 bg-primary text-on-primary rounded-lg text-sm font-semibold text-center block hover:scale-[0.98] transition-all">
+    View Public Registry
+  </a>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="md:ml-64 pt-14 md:pt-0 pb-24 md:pb-0 min-h-screen">
+
+
+  <div class="px-5 md:px-10 max-w-7xl pt-6 md:pt-10">
+
+    <!-- Stats -->
+    <div class="grid grid-cols-3 gap-3 md:gap-4 mb-8">
+
+      <!-- Cash gifts received -->
+      <div class="bg-tertiary-fixed p-4 md:p-6 rounded-xl relative overflow-hidden">
+        <p class="text-on-tertiary-fixed text-[10px] uppercase tracking-wider mb-1 opacity-60">Cash Gifts</p>
+        <h3 class="text-xl md:text-3xl font-serif text-tertiary" id="stat-cash">—</h3>
+        <p class="text-[10px] text-on-tertiary-fixed/60 mt-1" id="stat-cash-count"></p>
+        <div class="absolute -right-2 -bottom-2 opacity-10">
+          <span class="material-symbols-outlined text-6xl" style="font-variation-settings:'FILL' 1;">volunteer_activism</span>
+        </div>
+      </div>
+
+      <!-- Registry funded progress -->
+      <div class="bg-surface-container p-4 md:p-6 rounded-xl">
+        <p class="text-on-surface-variant text-[10px] uppercase tracking-wider mb-1">Registry Funded</p>
+        <div class="flex items-baseline gap-1">
+          <h3 class="text-xl md:text-3xl font-serif text-primary" id="stat-funded">—</h3>
+          <span class="text-xs text-on-surface-variant hidden md:inline" id="stat-funded-goal"></span>
+        </div>
+        <div class="mt-2 h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+          <div class="h-full bg-primary rounded-full transition-all duration-700" id="stat-funded-bar" style="width:0%"></div>
+        </div>
+        <p class="text-[10px] text-on-surface-variant mt-1" id="stat-funded-pct"></p>
+      </div>
+
+      <!-- Items claimed -->
+      <div class="bg-secondary-container p-4 md:p-6 rounded-xl">
+        <p class="text-on-secondary-container text-[10px] uppercase tracking-wider mb-1 opacity-70">Items Claimed</p>
+        <div class="flex items-baseline gap-1.5">
+          <h3 class="text-xl md:text-3xl font-serif text-on-secondary-container" id="stat-claimed">—</h3>
+          <span class="text-xs opacity-70" id="stat-claimed-total"></span>
+        </div>
+        <div class="mt-2 h-2 w-full bg-on-secondary-container/10 rounded-full overflow-hidden">
+          <div class="h-full bg-primary rounded-full transition-all duration-700" id="stat-claimed-bar" style="width:0%"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── INVENTORY PANEL ── -->
+    <div id="panel-inventory" class="space-y-4">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-2xl font-serif italic">Inventory</h3>
+        <div class="flex space-x-4 text-xs font-medium text-on-surface-variant">
+          <button onclick="filterItems('all')" class="filter-tab active pb-1" data-tab="all">All</button>
+          <button onclick="filterItems('Individual')" class="filter-tab pb-1" data-tab="Individual">Individual</button>
+          <button onclick="filterItems('Shared')" class="filter-tab pb-1" data-tab="Shared">Shared</button>
+        </div>
+      </div>
+
+      <!-- DESKTOP TABLE -->
+      <div class="hidden md:block bg-surface-container-low rounded-2xl overflow-hidden">
+        <table class="w-full text-left border-collapse" id="gifts-table">
+          <thead>
+            <tr class="text-[10px] uppercase tracking-widest text-on-surface-variant/70 border-b border-outline-variant/10">
+              <th class="px-6 py-4 font-semibold">Item</th>
+              <th class="px-6 py-4 font-semibold text-right">Price</th>
+              <th class="px-6 py-4 font-semibold">Type</th>
+              <th class="px-6 py-4 font-semibold">Status</th>
+              <th class="px-6 py-4 font-semibold text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="text-sm" id="gifts-tbody">
+            <tr id="gifts-loading-row"><td colspan="5" class="px-6 py-8 text-center text-on-surface-variant">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- MOBILE CARD LIST -->
+      <div class="md:hidden space-y-3" id="mobile-gifts-list">
+        <p class="text-center text-on-surface-variant py-4 text-sm">Loading…</p>
+      </div>
+    </div>
+
+    <!-- ── CONTRIBUTIONS PANEL ── -->
+    <div id="panel-contributions" class="hidden space-y-4">
+      <h3 class="text-2xl font-serif italic mb-2">Contributions</h3>
+
+      <!-- Search -->
+      <div class="relative">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant/50 text-base">search</span>
+        <input id="contribs-search" type="text" placeholder="Search by name or item…"
+          class="w-full pl-9 pr-4 py-2.5 bg-surface-container-low border-none rounded-xl text-sm focus:ring-1 focus:ring-primary/20 placeholder:text-on-surface-variant/40"
+          oninput="filterContribs(this.value)"/>
+      </div>
+
+      <!-- DESKTOP TABLE -->
+      <div class="hidden md:block bg-surface-container-low rounded-2xl overflow-hidden">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="text-[10px] uppercase tracking-widest text-on-surface-variant/70 border-b border-outline-variant/10">
+              <th class="px-6 py-4 font-semibold">Contributor</th>
+              <th class="px-6 py-4 font-semibold">Item</th>
+              <th class="px-6 py-4 font-semibold text-right">Amount</th>
+              <th class="px-6 py-4 font-semibold">Method</th>
+              <th class="px-6 py-4 font-semibold">Date &amp; Time</th>
+              <th class="px-6 py-4 font-semibold">Status</th>
+            </tr>
+          </thead>
+          <tbody class="text-sm" id="contribs-tbody">
+            <tr><td colspan="6" class="px-6 py-8 text-center text-on-surface-variant">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- MOBILE CARDS -->
+      <div class="md:hidden space-y-3" id="mobile-contribs-list">
+        <p class="text-center text-on-surface-variant py-4 text-sm">Loading…</p>
+      </div>
+    </div>
+
+    <!-- ── ADD NEW / EDIT PANEL ── -->
+    <div id="panel-add-new" class="hidden">
+      <div class="max-w-2xl">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-2xl font-serif italic" id="form-title">Add New Gift</h3>
+          <button type="button" onclick="resetForm(); switchView('inventory')"
+            class="flex items-center gap-1.5 text-sm text-on-surface-variant hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined text-base">arrow_back</span> Back to Inventory
+          </button>
+        </div>
+        <form id="gift-form" class="space-y-5" onsubmit="saveGift(event)">
+          <input type="hidden" id="editing-id" value="">
+          <div class="space-y-1">
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Gift Title</label>
+            <input id="f-title" class="w-full bg-surface-container-low border-none rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary/20 placeholder:text-on-surface-variant/40" placeholder="e.g. Winter Jacket" type="text" required/>
+          </div>
+          <div class="space-y-1">
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Description</label>
+            <textarea id="f-desc" class="w-full bg-surface-container-low border-none rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary/20 placeholder:text-on-surface-variant/40" placeholder="Tell your guests why this matters..." rows="3"></textarea>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Price ($)</label>
+              <input id="f-price" class="w-full bg-surface-container-low border-none rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary/20" placeholder="0.00" type="number" min="0"/>
+            </div>
+            <div class="space-y-1">
+              <label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Category</label>
+              <select id="f-category" class="w-full bg-surface-container-low border-none rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary/20 text-on-surface-variant">
+                <option value="essentials">Essentials</option>
+                <option value="kitchen">Kitchen</option>
+                <option value="clothing">Clothing</option>
+                <option value="transport">Transport</option>
+                <option value="tech">Tech &amp; Study</option>
+              </select>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Item Image</label>
+              <div class="flex gap-0.5 p-0.5 bg-surface-container-high rounded-lg">
+                <button type="button" id="img-tab-upload" onclick="setImgTab('upload')"
+                  class="px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wide transition-all bg-white shadow-sm text-on-surface">Upload</button>
+                <button type="button" id="img-tab-url" onclick="setImgTab('url')"
+                  class="px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wide transition-all text-on-surface-variant">URL</button>
+              </div>
+            </div>
+            <!-- Upload panel -->
+            <div id="img-panel-upload">
+              <label id="img-drop-zone" class="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-outline-variant rounded-xl p-5 cursor-pointer hover:bg-surface-container-lowest transition-colors text-on-surface-variant/60">
+                <span class="material-symbols-outlined text-3xl">cloud_upload</span>
+                <p class="text-xs text-center">Click or drag &amp; drop · JPG, PNG, WebP · max 5 MB</p>
+                <input id="f-image-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif" class="hidden" onchange="previewImage(this)"/>
+              </label>
+              <div id="img-preview-wrap" class="hidden mt-2 relative">
+                <img id="img-preview" class="w-full h-48 object-cover rounded-xl" src="" alt="Preview"/>
+                <button type="button" onclick="clearImageFile()" class="absolute top-2 right-2 bg-black/50 text-white rounded-full p-1 hover:bg-black/70 transition-colors">
+                  <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+              </div>
+            </div>
+            <!-- URL panel -->
+            <div id="img-panel-url" class="hidden">
+              <input id="f-image" class="w-full bg-surface-container-low border-none rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary/20 placeholder:text-on-surface-variant/40" placeholder="https://…" type="url"/>
+            </div>
+          </div>
+          <div class="flex items-center justify-between p-4 bg-surface-container-low rounded-xl">
+            <div>
+              <p class="text-xs font-bold text-on-surface">Shared Contribution</p>
+              <p class="text-[10px] text-on-surface-variant">Allow multiple guests to chip in</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input id="f-shared" class="sr-only peer" type="checkbox"/>
+              <div class="w-11 h-6 bg-stone-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            </label>
+          </div>
+          <div class="flex space-x-3 pt-2 pb-8">
+            <button class="flex-1 bg-primary text-on-primary py-3 rounded-lg font-semibold text-sm shadow-md hover:-translate-y-0.5 transition-all" type="submit" id="form-submit-btn">Add Gift</button>
+            <button class="px-5 py-3 border border-outline-variant text-on-surface-variant rounded-lg font-semibold text-sm hover:bg-surface-container-lowest transition-all" type="button" onclick="resetForm(); switchView('inventory')">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ── MOBILE BOTTOM NAV ── -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-5 pt-3 bg-white/85 backdrop-blur-md rounded-t-2xl border-t border-stone-200/20 shadow-[0_-8px_24px_rgba(85,67,62,0.08)]">
+  <button id="mobile-nav-inventory" onclick="switchView('inventory')" class="flex flex-col items-center gap-0.5 text-[#C76D52] bg-[#f6ece6] rounded-xl px-4 py-1">
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">featured_play_list</span>
+    <span class="text-[10px] uppercase tracking-widest font-bold">Gifts</span>
+  </button>
+  <button id="mobile-nav-contributions" onclick="switchView('contributions')" class="flex flex-col items-center gap-0.5 text-stone-500 opacity-70">
+    <span class="material-symbols-outlined">payments</span>
+    <span class="text-[10px] uppercase tracking-widest font-bold">Contribs</span>
+  </button>
+  <button id="mobile-nav-add-new" onclick="switchView('add-new')" class="flex flex-col items-center gap-0.5 text-stone-500 opacity-70">
+    <span class="material-symbols-outlined">add_circle</span>
+    <span class="text-[10px] uppercase tracking-widest font-bold">Add New</span>
+  </button>
+  <a href="index.html" class="flex flex-col items-center gap-0.5 text-stone-500 opacity-70">
+    <span class="material-symbols-outlined">public</span>
+    <span class="text-[10px] uppercase tracking-widest font-bold">Public</span>
+  </a>
+</nav>
+
+<script>
+  const { createClient } = supabase;
+  const db = createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
+
+  // ── Auth guard ──
+  (async () => {
+    const { data: { session } } = await db.auth.getSession();
+    if (!session) { window.location.replace('admin-login.html'); return; }
+    loadItems();
+    loadStats();
+  })();
+
+  async function signOut() {
+    await db.auth.signOut();
+    window.location.replace('admin-login.html');
+  }
+
+  // ── Rotating greeting ──
+  const greetings = ['Hi', 'হ্যালো', 'Hola', 'Bonjour', 'こんにちは', 'مرحبًا', 'नमस्ते', 'Hallo', 'Olá', '안녕'];
+  let greetingIdx = 0;
+  setInterval(() => {
+    const el = document.getElementById('greeting-text');
+    if (!el) return;
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(-5px)';
+    setTimeout(() => {
+      greetingIdx = (greetingIdx + 1) % greetings.length;
+      el.textContent = greetings[greetingIdx] + ',';
+      el.style.transform = 'translateY(5px)';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      }));
+    }, 350);
+  }, 6000);
+
+  let allItems = [];
+
+  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function statusBadge(status) {
+    if (status === 'claimed') return `<span class="flex items-center space-x-1 text-primary"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span><span class="text-xs">Claimed</span></span>`;
+    if (status === 'partial') return `<span class="flex items-center space-x-1 text-amber-700"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span><span class="text-xs">Partial</span></span>`;
+    return `<span class="flex items-center space-x-1 text-green-700"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span><span class="text-xs">Available</span></span>`;
+  }
+  function statusPill(status) {
+    if (status === 'claimed') return `<span class="text-[10px] font-bold text-primary bg-primary-fixed px-2 py-0.5 rounded-full">Claimed</span>`;
+    if (status === 'partial') return `<span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">Partial</span>`;
+    return `<span class="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded-full">Available</span>`;
+  }
+
+  async function loadItems() {
+    const { data, error } = await db.from('items').select('*').order('sort_order');
+    if (error || !data) return;
+    allItems = data.filter(i => i.category !== 'cash');
+    renderTable(allItems);
+    renderMobileList(allItems);
+  }
+
+  function renderTable(items) {
+    const tbody = document.getElementById('gifts-tbody');
+    if (items.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-on-surface-variant text-sm">No items yet.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = items.map(item => {
+      const type = item.is_group_gift ? 'Shared' : 'Individual';
+      return `
+        <tr class="hover:bg-surface transition-colors group" data-type="${type}" data-id="${esc(item.id)}">
+          <td class="px-6 py-5">
+            <div class="flex items-center space-x-3">
+              <img alt="${esc(item.title)}" class="w-10 h-10 rounded-md object-cover shadow-sm" src="${esc(item.image_url||'')}">
+              <div><p class="font-bold text-on-surface">${esc(item.title)}</p><p class="text-[10px] text-on-surface-variant/60 capitalize">${esc(item.category)}</p></div>
+            </div>
+          </td>
+          <td class="px-6 py-5 text-right font-medium">${item.price ? '$' + Number(item.price).toLocaleString() : '—'}</td>
+          <td class="px-6 py-5"><span class="px-2 py-1 ${item.is_group_gift ? 'bg-secondary-container' : 'bg-surface-container'} text-[10px] font-bold rounded uppercase">${type}</span></td>
+          <td class="px-6 py-5">${statusBadge(item.status)}</td>
+          <td class="px-6 py-5 text-right"><div class="flex justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            ${(item.status === 'claimed' || item.category === 'cash')
+              ? `<span title="${item.category === 'cash' ? 'Cash gift — system item' : 'Claimed — cannot edit'}" class="p-2 text-on-surface-variant/30 cursor-not-allowed"><span class="material-symbols-outlined text-lg">lock</span></span>`
+              : `<button onclick="editItem('${esc(item.id)}')" class="p-2 hover:bg-primary-fixed rounded-full text-primary transition-colors"><span class="material-symbols-outlined text-lg">edit</span></button>`}
+            ${(item.status === 'claimed' || item.category === 'cash' || (item.status === 'partial' && item.is_group_gift))
+              ? `<span title="${item.category === 'cash' ? 'Cash gift — system item' : item.status === 'claimed' ? 'Claimed — cannot delete' : 'Partially funded — cannot delete'}" class="p-2 text-on-surface-variant/30 cursor-not-allowed"><span class="material-symbols-outlined text-lg">lock</span></span>`
+              : `<button onclick="deleteItem('${esc(item.id)}')" class="p-2 hover:bg-error-container rounded-full text-error transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button>`}
+          </div></td>
+        </tr>`;
+    }).join('');
+  }
+
+  function renderMobileList(items) {
+    const list = document.getElementById('mobile-gifts-list');
+    if (items.length === 0) {
+      list.innerHTML = '<p class="text-center text-on-surface-variant py-4 text-sm">No items yet.</p>';
+      return;
+    }
+    list.innerHTML = items.map(item => {
+      const type = item.is_group_gift ? 'Shared' : 'Individual';
+      return `
+        <div class="bg-surface-container-lowest p-3.5 rounded-xl flex items-center gap-4 border border-outline-variant/10" data-type="${type}" data-id="${esc(item.id)}">
+          <img class="w-14 h-14 rounded-lg object-cover flex-shrink-0" src="${esc(item.image_url||'')}" alt="${esc(item.title)}"/>
+          <div class="flex-1 min-w-0">
+            <p class="font-bold text-sm text-on-surface truncate">${esc(item.title)}</p>
+            <p class="text-xs text-on-surface-variant">${item.price ? '$' + Number(item.price).toLocaleString() : '—'} · ${type}</p>
+          </div>
+          <div class="flex flex-col items-end gap-2 flex-shrink-0">
+            ${statusPill(item.status)}
+            <div class="flex gap-1">
+              ${item.status === 'claimed'
+                ? `<span title="Claimed — cannot edit" class="p-1.5 text-on-surface-variant/30 cursor-not-allowed"><span class="material-symbols-outlined text-base">lock</span></span>`
+                : `<button onclick="editItem('${esc(item.id)}')" class="p-1.5 hover:bg-primary-fixed rounded-full text-primary transition-colors"><span class="material-symbols-outlined text-base">edit</span></button>`}
+              ${(item.status === 'claimed' || (item.status === 'partial' && item.is_group_gift))
+                ? `<span title="${item.status === 'claimed' ? 'Claimed — cannot delete' : 'Partially funded — cannot delete'}" class="p-1.5 text-on-surface-variant/30 cursor-not-allowed"><span class="material-symbols-outlined text-base">lock</span></span>`
+                : `<button onclick="deleteItem('${esc(item.id)}')" class="p-1.5 hover:bg-error-container rounded-full text-error transition-colors"><span class="material-symbols-outlined text-base">delete</span></button>`}
+
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── Filter ──
+  function filterItems(type) {
+    const filtered = type === 'all' ? allItems : allItems.filter(i => (i.is_group_gift ? 'Shared' : 'Individual') === type);
+    renderTable(filtered);
+    renderMobileList(filtered);
+    document.querySelectorAll('.filter-tab').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === type));
+  }
+
+  // ── Edit ──
+  // ── Image tab helpers ──
+  function setImgTab(tab) {
+    const isUpload = tab === 'upload';
+    document.getElementById('img-panel-upload').classList.toggle('hidden', !isUpload);
+    document.getElementById('img-panel-url').classList.toggle('hidden', isUpload);
+    document.getElementById('img-tab-upload').className = isUpload
+      ? 'px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wide transition-all bg-white shadow-sm text-on-surface'
+      : 'px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wide transition-all text-on-surface-variant';
+    document.getElementById('img-tab-url').className = isUpload
+      ? 'px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wide transition-all text-on-surface-variant'
+      : 'px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wide transition-all bg-white shadow-sm text-on-surface';
+  }
+
+  function previewImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    document.getElementById('img-preview').src = url;
+    document.getElementById('img-preview-wrap').classList.remove('hidden');
+    document.getElementById('img-drop-zone').classList.add('hidden');
+  }
+
+  function clearImageFile() {
+    document.getElementById('f-image-file').value = '';
+    document.getElementById('img-preview').src = '';
+    document.getElementById('img-preview-wrap').classList.add('hidden');
+    document.getElementById('img-drop-zone').classList.remove('hidden');
+  }
+
+  function editItem(id) {
+    const item = allItems.find(i => i.id === id);
+    if (!item) return;
+    document.getElementById('editing-id').value = id;
+    document.getElementById('f-title').value = item.title;
+    document.getElementById('f-desc').value = item.description || '';
+    document.getElementById('f-price').value = item.price || '';
+    document.getElementById('f-category').value = item.category;
+    if (item.image_url) {
+      setImgTab('url');
+      document.getElementById('f-image').value = item.image_url;
+    } else {
+      setImgTab('upload');
+    }
+    document.getElementById('f-shared').checked = item.is_group_gift;
+    document.getElementById('form-title').textContent = 'Edit Gift';
+    document.getElementById('form-submit-btn').textContent = 'Save Changes';
+    switchView('add-new');
+  }
+
+  function resetForm() {
+    document.getElementById('gift-form').reset();
+    document.getElementById('editing-id').value = '';
+    document.getElementById('form-title').textContent = 'Add New Gift';
+    document.getElementById('form-submit-btn').textContent = 'Add Gift';
+    clearImageFile();
+    setImgTab('upload');
+  }
+
+  // ── Save (insert or update) ──
+  async function saveGift(e) {
+    e.preventDefault();
+    const btn = document.getElementById('form-submit-btn');
+    btn.textContent = 'Saving…';
+    btn.disabled = true;
+
+    const editingId = document.getElementById('editing-id').value;
+    // Resolve image — upload file if chosen, otherwise use URL field
+    let image_url = document.getElementById('f-image').value.trim() || null;
+    const fileInput = document.getElementById('f-image-file');
+    const file = fileInput && fileInput.files[0];
+    if (file) {
+      const ext = file.name.split('.').pop();
+      const path = `items/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { data: uploadData, error: uploadError } = await db.storage
+        .from('item-images')
+        .upload(path, file, { upsert: true, contentType: file.type });
+      if (uploadError) {
+        alert('Image upload failed: ' + uploadError.message);
+        btn.textContent = editingId ? 'Save Changes' : 'Add Gift';
+        btn.disabled = false;
+        return;
+      }
+      const { data: { publicUrl } } = db.storage.from('item-images').getPublicUrl(path);
+      image_url = publicUrl;
+    }
+
+    const payload = {
+      title:        document.getElementById('f-title').value.trim(),
+      description:  document.getElementById('f-desc').value.trim() || null,
+      price:        parseFloat(document.getElementById('f-price').value) || null,
+      category:     document.getElementById('f-category').value,
+      image_url,
+      is_group_gift: document.getElementById('f-shared').checked,
+    };
+
+    let error;
+    if (editingId) {
+      ({ error } = await db.from('items').update(payload).eq('id', editingId));
+    } else {
+      ({ error } = await db.from('items').insert(payload));
+    }
+
+    if (error) {
+      alert('Save failed: ' + error.message);
+      btn.textContent = editingId ? 'Update Gift' : 'Add Gift';
+      btn.disabled = false;
+      return;
+    }
+
+    resetForm();
+    switchView('inventory');
+    btn.disabled = false;
+    await loadItems();
+  }
+
+  // ── Delete ──
+  async function deleteItem(id) {
+    if (!confirm('Remove this item from the registry?')) return;
+    const { error } = await db.from('items').delete().eq('id', id);
+    if (error) { alert('Delete failed: ' + error.message); return; }
+    // Animate out
+    [`#gifts-tbody tr[data-id="${id}"]`, `#mobile-gifts-list > div[data-id="${id}"]`].forEach(sel => {
+      const el = document.querySelector(sel);
+      if (!el) return;
+      el.classList.add('deleting');
+      setTimeout(() => el.remove(), 320);
+    });
+    allItems = allItems.filter(i => i.id !== id);
+  }
+
+  // ── Mobile sidebar ──
+  function toggleMobileSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobile-sidebar-overlay');
+    const open = sidebar.classList.toggle('-translate-x-full');
+    overlay.classList.toggle('hidden', open);
+  }
+
+  async function loadStats() {
+    const [{ data: items }, { data: contribs }] = await Promise.all([
+      db.from('items').select('price, status, category'),
+      db.from('contributions').select('amount, items(category)'),
+    ]);
+    if (!items || !contribs) return;
+
+    // Items claimed tile
+    const nonCash = items.filter(i => i.category !== 'cash');
+    const claimed = nonCash.filter(i => i.status === 'claimed').length;
+    const total   = nonCash.length;
+    const claimedPct = total ? Math.round((claimed / total) * 100) : 0;
+    document.getElementById('stat-claimed').textContent = claimed;
+    document.getElementById('stat-claimed-total').textContent = 'of ' + total;
+    document.getElementById('stat-claimed-bar').style.width = claimedPct + '%';
+
+    // Registry funded tile
+    const goalTotal = nonCash.reduce((s, i) => s + (Number(i.price) || 0), 0);
+    const moneyContribs = contribs.filter(c => c.amount && c.items?.category !== 'cash');
+    const raised = moneyContribs.reduce((s, c) => s + Number(c.amount), 0);
+    const fundedPct = goalTotal ? Math.min(100, Math.round((raised / goalTotal) * 100)) : 0;
+    document.getElementById('stat-funded').textContent = '$' + raised.toLocaleString();
+    document.getElementById('stat-funded-goal').textContent = 'of $' + goalTotal.toLocaleString();
+    document.getElementById('stat-funded-bar').style.width = fundedPct + '%';
+    document.getElementById('stat-funded-pct').textContent = fundedPct + '% of registry value';
+
+    // Cash gifts tile
+    const cashContribs = contribs.filter(c => c.amount && (!c.items || c.items.category === 'cash'));
+    const cashTotal = cashContribs.reduce((s, c) => s + Number(c.amount), 0);
+    document.getElementById('stat-cash').textContent = '$' + cashTotal.toLocaleString();
+    document.getElementById('stat-cash-count').textContent = cashContribs.length + ' contribution' + (cashContribs.length !== 1 ? 's' : '');
+  }
+
+  // ── View management ──
+  let contribsLoaded = false;
+  let allContribs = [];
+
+  function switchView(view) {
+    const isInventory = view === 'inventory';
+    const isContribs  = view === 'contributions';
+    const isAddNew    = view === 'add-new';
+
+    // Panels
+    document.getElementById('panel-inventory').classList.toggle('hidden', !isInventory);
+    document.getElementById('panel-contributions').classList.toggle('hidden', !isContribs);
+    document.getElementById('panel-add-new').classList.toggle('hidden', !isAddNew);
+
+    // Sidebar active states
+    const activeClass = 'w-full flex items-center space-x-3 px-4 py-3 bg-white text-orange-900 rounded-lg font-bold shadow-sm text-left transition-all';
+    const inactiveClass = 'w-full flex items-center space-x-3 px-4 py-3 text-stone-600 hover:bg-stone-200/50 rounded-lg transition-all text-left';
+    const sidebarMap = { inventory: 'sidebar-inventory', contributions: 'sidebar-contributions', 'add-new': 'sidebar-add-new' };
+    Object.entries(sidebarMap).forEach(([v, id]) => {
+      const el = document.getElementById(id);
+      if (el) el.className = v === view ? activeClass : inactiveClass;
+    });
+
+
+    // Mobile bottom nav active states
+    const mobileNavMap = { inventory: 'mobile-nav-inventory', contributions: 'mobile-nav-contributions', 'add-new': 'mobile-nav-add-new' };
+    Object.entries(mobileNavMap).forEach(([v, id]) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const active = v === view;
+      el.className = active
+        ? 'flex flex-col items-center gap-0.5 text-[#C76D52] bg-[#f6ece6] rounded-xl px-4 py-1'
+        : 'flex flex-col items-center gap-0.5 text-stone-500 opacity-70';
+    });
+
+    // Lazy-load contributions
+    if (isContribs && !contribsLoaded) {
+      contribsLoaded = true;
+      loadContributions();
+    }
+
+    // URL hash
+    if (isContribs) history.replaceState(null, '', 'admin-gifts.html#contributions');
+    else if (isAddNew) history.replaceState(null, '', 'admin-gifts.html#add-new');
+    else history.replaceState(null, '', 'admin-gifts.html');
+  }
+
+  function switchTab(tab) { switchView(tab); }
+
+  // ── Contributions ──
+  function fmtDateTime(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      + ' · ' + d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  }
+
+  function contribStatusBadge(status) {
+    if (status === 'confirmed') return `<span class="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded-full">Confirmed</span>`;
+    if (status === 'cancelled') return `<span class="text-[10px] font-bold text-error bg-error-container px-2 py-0.5 rounded-full">Cancelled</span>`;
+    return `<span class="text-[10px] font-bold text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded-full">Pending</span>`;
+  }
+
+  function methodBadge(method) {
+    if (method === 'gift') return `<span class="inline-flex items-center gap-1 text-[10px] font-bold text-secondary bg-secondary-container px-2 py-0.5 rounded-full"><span class="material-symbols-outlined text-xs">local_shipping</span>Shipped</span>`;
+    return `<span class="inline-flex items-center gap-1 text-[10px] font-bold text-primary bg-primary-fixed px-2 py-0.5 rounded-full"><span class="material-symbols-outlined text-xs">payments</span>Money</span>`;
+  }
+
+  function initials(name) {
+    return String(name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  }
+
+  async function loadContributions() {
+    const { data, error } = await db
+      .from('contributions')
+      .select('*, items(title)')
+      .order('created_at', { ascending: false });
+
+    if (error || !data) {
+      document.getElementById('contribs-tbody').innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-on-surface-variant text-sm">Could not load contributions.</td></tr>`;
+      return;
+    }
+    allContribs = data;
+    renderContribTable(data);
+    renderContribMobile(data);
+  }
+
+  function renderContribTable(rows) {
+    const tbody = document.getElementById('contribs-tbody');
+    if (!rows.length) {
+      tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-on-surface-variant text-sm">No contributions yet.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = rows.map(c => {
+      const hues = [14,28,42,200,160,260];
+      const hue = hues[(c.contributor_name||'?').charCodeAt(0) % hues.length];
+      return `
+        <tr class="hover:bg-surface transition-colors border-b border-outline-variant/10 last:border-0">
+          <td class="px-6 py-4">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style="background:hsl(${hue},55%,52%)">${initials(c.contributor_name)}</div>
+              <span class="font-medium text-on-surface">${esc(c.contributor_name||'Anonymous')}</span>
+            </div>
+          </td>
+          <td class="px-6 py-4 text-on-surface-variant">${esc(c.items?.title || 'Cash Gift')}</td>
+          <td class="px-6 py-4 text-right font-semibold text-primary">${c.amount ? '$' + Number(c.amount).toLocaleString() : '—'}</td>
+          <td class="px-6 py-4">${methodBadge(c.method)}</td>
+          <td class="px-6 py-4 text-xs text-on-surface-variant whitespace-nowrap">${fmtDateTime(c.created_at)}</td>
+          <td class="px-6 py-4">${contribStatusBadge(c.status)}</td>
+        </tr>`;
+    }).join('');
+  }
+
+  function renderContribMobile(rows) {
+    const list = document.getElementById('mobile-contribs-list');
+    if (!rows.length) {
+      list.innerHTML = `<p class="text-center text-on-surface-variant py-4 text-sm">No contributions yet.</p>`;
+      return;
+    }
+    list.innerHTML = rows.map(c => {
+      const hues = [14,28,42,200,160,260];
+      const hue = hues[(c.contributor_name||'?').charCodeAt(0) % hues.length];
+      return `
+        <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/10">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style="background:hsl(${hue},55%,52%)">${initials(c.contributor_name)}</div>
+            <div class="flex-1 min-w-0">
+              <p class="font-bold text-sm text-on-surface">${esc(c.contributor_name||'Anonymous')}</p>
+              <p class="text-xs text-on-surface-variant truncate">${esc(c.items?.title || 'Cash Gift')}</p>
+            </div>
+            ${c.amount ? `<span class="font-bold text-sm text-primary shrink-0">$${Number(c.amount).toLocaleString()}</span>` : ''}
+          </div>
+          <div class="flex items-center justify-between mt-1">
+            <span class="text-[10px] text-on-surface-variant">${fmtDateTime(c.created_at)}</span>
+            <div class="flex gap-1.5">${methodBadge(c.method)} ${contribStatusBadge(c.status)}</div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function filterContribs(query) {
+    const q = query.toLowerCase();
+    const filtered = q
+      ? allContribs.filter(c =>
+          (c.contributor_name||'').toLowerCase().includes(q) ||
+          (c.items?.title||'').toLowerCase().includes(q))
+      : allContribs;
+    renderContribTable(filtered);
+    renderContribMobile(filtered);
+  }
+
+  // Activate view from URL hash
+  if (location.hash === '#contributions') switchView('contributions');
+  else if (location.hash === '#add-new') switchView('add-new');
+
+</script>
+</body>
+</html>

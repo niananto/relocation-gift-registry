@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Moving to the States! | Ananto's Registry</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="config.js"></script>
+<script>if (window.EMAILJS_PUBLIC_KEY) emailjs.init(window.EMAILJS_PUBLIC_KEY);</script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-secondary-fixed":"#121f0b","surface-bright":"#fff8f5","on-secondary-fixed-variant":"#3d4b34",
+          "tertiary-fixed-dim":"#d6c4a7","surface-container-low":"#fcf2ec","secondary-container":"#d7e8c8",
+          "primary":"#93452d","on-error":"#ffffff","on-primary-fixed":"#3a0a00","on-secondary":"#ffffff",
+          "surface-container-lowest":"#ffffff","on-background":"#1f1b18","error-container":"#ffdad6",
+          "on-tertiary-fixed-variant":"#51452f","on-primary-fixed-variant":"#78301a","error":"#ba1a1a",
+          "background":"#fff8f5","surface-dim":"#e1d8d3","outline-variant":"#dac1ba","surface-tint":"#96472f",
+          "primary-fixed":"#ffdbd1","tertiary":"#685a42","surface-container-high":"#f0e6e1","surface":"#fff8f5",
+          "tertiary-fixed":"#f3e0c2","on-tertiary-fixed":"#241a07","surface-container":"#f6ece6",
+          "on-primary-container":"#fffbff","on-surface-variant":"#55433e","inverse-primary":"#ffb59f",
+          "surface-variant":"#eae1db","secondary-fixed-dim":"#bbccad","on-tertiary-container":"#fffbff",
+          "surface-container-highest":"#eae1db","inverse-on-surface":"#f9efe9","secondary-fixed":"#d7e8c8",
+          "outline":"#88726d","on-error-container":"#93000a","inverse-surface":"#342f2c","secondary":"#54634a",
+          "tertiary-container":"#817359","on-tertiary":"#ffffff","primary-container":"#b25c43",
+          "on-secondary-container":"#5a6950","on-primary":"#ffffff","on-surface":"#1f1b18","primary-fixed-dim":"#ffb59f"
+        },
+        borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},
+        fontFamily:{"headline":["Noto Serif"],"body":["Plus Jakarta Sans"],"label":["Plus Jakarta Sans"]}
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .font-serif { font-family: 'Noto Serif', serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+  .signature-texture { background-image: radial-gradient(circle at 2px 2px, rgba(147,69,45,0.05) 1px, transparent 0); background-size: 40px 40px; }
+  .grain-overlay { position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99;opacity:0.025;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size:160px; }
+  .filter-btn.active { background: white; color: #93452d; font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .registry-card { transition: opacity .2s, transform .2s; }
+  .registry-card.hidden-item { display: none; }
+</style>
+</head>
+<body class="bg-background text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed min-h-screen signature-texture">
+<div class="grain-overlay"></div>
+
+<!-- ── DESKTOP NAV (hidden on mobile) ── -->
+<header class="hidden md:block sticky top-0 z-50 bg-orange-50/90 backdrop-blur-md">
+  <nav class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+    <div class="text-2xl font-serif italic text-orange-900">Moving to the States!</div>
+    <div class="flex space-x-8">
+      <a class="text-orange-900 font-semibold border-b-2 border-orange-800" href="index.html">Registry</a>
+      <a class="text-stone-500 font-medium hover:text-orange-700 transition-colors" href="#thank-you-wall">Thank You Wall</a>
+    </div>
+    <div class="flex items-center">
+      <a href="admin-gifts.html" class="flex items-center gap-1.5 text-xs font-semibold text-stone-400 hover:text-primary transition-colors border border-stone-200 hover:border-primary/30 rounded-lg px-3 py-1.5">
+        <span class="material-symbols-outlined text-base">admin_panel_settings</span> Admin
+      </a>
+    </div>
+  </nav>
+</header>
+
+<!-- ── MOBILE NAV (hidden on desktop) ── -->
+<header class="md:hidden fixed top-0 w-full z-50 bg-[#fff8f5]/95 backdrop-blur-md border-b border-outline-variant/20">
+  <div class="flex justify-between items-center px-5 py-4">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-primary">menu</span>
+      <span class="font-serif text-lg font-bold text-orange-900">Moving to the States!</span>
+    </div>
+    <a href="admin-gifts.html">
+      <img src="https://github.com/niananto/academics/blob/gh-pages/images/ananto_dp_5.jpg?raw=true" class="w-8 h-8 rounded-full object-cover border border-outline-variant/30" alt="Ananto"/>
+    </a>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 md:px-6 pt-20 md:pt-12 pb-28 md:pb-20">
+
+  <!-- ── HERO ── -->
+  <section class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center mb-16 md:mb-24">
+    <div class="md:col-span-7 text-center md:text-left">
+      <span class="text-xs uppercase tracking-widest text-primary font-bold mb-3 block">New Chapter Begins</span>
+      <h1 class="text-4xl md:text-7xl font-serif italic text-on-surface leading-tight mb-5">Be a part of my relocation journey</h1>
+      <p class="text-base md:text-lg text-on-surface-variant max-w-xl mx-auto md:mx-0 leading-relaxed mb-7">
+        This fall, I'm moving from Dhaka to State College, PA to start my PhD in Computer Science at Penn State. Pick something from the list and help me land on my feet.
+      </p>
+      <div class="flex flex-wrap items-center justify-center md:justify-start gap-3">
+        <a href="#registry" class="bg-primary text-on-primary px-7 py-3 rounded-lg font-semibold hover:bg-primary-container transition-all hover:-translate-y-0.5 text-sm md:text-base">Browse Registry</a>
+        <a href="#contribution-section" class="bg-secondary-container text-on-secondary-container px-7 py-3 rounded-lg font-semibold hover:bg-secondary-fixed transition-all hover:-translate-y-0.5 text-sm md:text-base">How to Contribute</a>
+      </div>
+    </div>
+    <div class="md:col-span-5 relative flex justify-center">
+      <div class="w-56 md:w-full aspect-[4/5] rounded-xl overflow-hidden shadow-2xl relative z-10 transform md:rotate-3 hover:rotate-0 transition-transform duration-500">
+        <img alt="Ananto — moving to Penn State" class="w-full h-full object-cover"
+          src="https://github.com/niananto/academics/blob/gh-pages/images/ananto_dp_5.jpg?raw=true">
+      </div>
+      <div class="absolute -bottom-4 -left-2 w-24 h-24 bg-secondary-container rounded-full -z-10 opacity-50"></div>
+      <div class="absolute -top-4 -right-2 w-32 h-32 border-2 border-outline-variant rounded-xl -z-10 opacity-30"></div>
+    </div>
+  </section>
+
+  <!-- ── REGISTRY ── -->
+  <section id="registry">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8 md:mb-12">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-serif text-on-surface">Curated Essentials</h2>
+        <p class="text-on-surface-variant mt-1 text-sm md:text-base">Thoughtfully selected for my new life in State College, PA.</p>
+      </div>
+      <div class="flex items-center gap-3 self-start md:self-auto w-full md:w-auto">
+        <div class="flex gap-1 p-1 bg-surface-container rounded-xl overflow-x-auto flex-1 md:flex-none">
+          <button onclick="filterRegistry('all')" data-filter="all" class="filter-btn active px-4 md:px-6 py-2 rounded-lg text-on-surface-variant font-medium text-xs md:text-sm transition-all whitespace-nowrap">All Items</button>
+          <button onclick="filterRegistry('essentials')" data-filter="essentials" class="filter-btn px-4 md:px-6 py-2 rounded-lg text-on-surface-variant font-medium text-xs md:text-sm transition-all whitespace-nowrap">Essentials</button>
+          <button onclick="filterRegistry('kitchen')" data-filter="kitchen" class="filter-btn px-4 md:px-6 py-2 rounded-lg text-on-surface-variant font-medium text-xs md:text-sm transition-all whitespace-nowrap">Kitchen</button>
+          <button onclick="filterRegistry('clothing')" data-filter="clothing" class="filter-btn px-4 md:px-6 py-2 rounded-lg text-on-surface-variant font-medium text-xs md:text-sm transition-all whitespace-nowrap">Clothing</button>
+        </div>
+        <div class="flex gap-0.5 p-1 bg-surface-container rounded-xl shrink-0">
+          <button id="cur-usd" onclick="setCurrency('usd')" class="px-3 py-2 rounded-lg text-xs font-bold transition-all text-on-surface bg-white shadow-sm">$ USD</button>
+          <button id="cur-bdt" onclick="setCurrency('bdt')" class="px-3 py-2 rounded-lg text-xs font-bold transition-all text-on-surface-variant">৳ BDT</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cash gift card — always visible, outside the filtered grid -->
+    <div id="cash-gift-banner" class="mb-5 md:mb-6"></div>
+
+    <div id="registry-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+      <div id="registry-loading" class="col-span-full flex items-center justify-center py-16 text-on-surface-variant gap-3">
+        <span class="material-symbols-outlined animate-spin text-primary">progress_activity</span>
+        Loading registry…
+      </div>
+
+      <!-- Group Gift — spans 2 cols on desktop -->
+      <div class="registry-card lg:col-span-2 bg-surface-container-low rounded-xl overflow-hidden flex flex-col md:flex-row group" data-category="essentials">
+        <div class="md:w-1/2 h-52 md:h-auto overflow-hidden">
+          <img alt="Modern sectional sofa" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5b2JPH85oJxivMaut2bbF28qNeqOhHyn5tLHvA30lBtD7Ts7f7-PbxmvyBORXTGiGhhGLtHW8uGiyTCXHxY4Oq7l7Gza71U56n3xoU_6FmbI-_XmVpXGhtveMoDvaYXlgVdk5fk3rofHgfQTrV7j_wqfD9SuFf4biDN_C-XrQF8kFXA9GjRHM86C0RlYe4asBbegbeKgdGx25-jQ0TrWUX5QraET7rss4q8uOLsETw12nwo-kL0emHIFKKXxKOFvi74ZLdZDGVsE">
+        </div>
+        <div class="md:w-1/2 p-6 md:p-8 flex flex-col justify-center">
+          <span class="text-xs text-primary font-bold uppercase tracking-widest mb-2">Group Gift</span>
+          <h3 class="text-xl md:text-2xl font-serif text-on-surface mb-3">Cloud Comfort Sectional</h3>
+          <p class="text-on-surface-variant text-sm mb-5 leading-relaxed">A place to rest and host friends in my new living room. This is my biggest priority for the home.</p>
+          <div class="space-y-3 mb-6">
+            <div class="flex justify-between text-sm font-semibold">
+              <span class="text-on-surface-variant">Progress</span>
+              <span class="text-primary">$1,250 / $2,800</span>
+            </div>
+            <div class="w-full bg-secondary-fixed-dim/30 h-2.5 rounded-full overflow-hidden">
+              <div class="bg-primary h-full rounded-full" style="width:45%"></div>
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <div class="relative flex-grow">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">$</span>
+              <input class="w-full pl-7 pr-3 py-3 bg-surface-container-lowest border-none rounded-lg focus:ring-2 focus:ring-primary/20 text-sm" placeholder="Amount" type="number" min="1">
+            </div>
+            <button onclick="scrollToContribute()" class="bg-primary text-on-primary px-5 py-3 rounded-lg font-bold text-sm hover:-translate-y-0.5 transition-all">Contribute</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kitchen Tool Set -->
+      <div class="registry-card bg-surface-container-lowest rounded-xl overflow-hidden group border border-outline-variant/10 hover:shadow-xl transition-all duration-500" data-category="kitchen">
+        <div class="aspect-square overflow-hidden relative">
+          <img alt="Kitchen tool set" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMfpnXTz2mLxJ2mFbc_E78nTldRCoeMPnwAR2aqQpXXerQ7n0AaIOsu1TBZS6XCIfvrF1h9ATW3XP_rEX02zd4qz9XIhizxDTcTOPQqRFgJRPIM2GT9uPKB5xCwhIQ_dHhJl_I3CIep_oCLm2yDfuY_dbtDR3Cw-Cpz4fcwHrCeP5_LtEB73cs2ntHsFwj9eAK8JFSsMRk6LTudnRFW18r5GoV1sECpdITT6b8jx6MtlZ9fmqBOQLI3JP1GRiUZBYKOurwM6lptXg">
+          <div class="absolute top-3 right-3 bg-surface/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-primary">$85.00</div>
+        </div>
+        <div class="p-5 md:p-6">
+          <h3 class="text-lg md:text-xl font-serif mb-2">Essential Kitchen Tool Set</h3>
+          <p class="text-sm text-on-surface-variant mb-5">Wooden utensils and heat-resistant silicone tools for every meal I cook in my new kitchen.</p>
+          <button onclick="claimItem('Essential Kitchen Tool Set', 85, this)" class="w-full bg-secondary-container text-on-secondary-container py-3 rounded-lg font-bold hover:bg-secondary-fixed transition-all flex items-center justify-center gap-2 text-sm">
+            Claim Gift <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Claimed — Espresso (always shown) -->
+      <div class="registry-card bg-surface-container rounded-xl overflow-hidden filter grayscale-[0.25]" data-category="kitchen">
+        <div class="aspect-square overflow-hidden relative">
+          <img alt="Espresso machine" class="w-full h-full object-cover opacity-75"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFkt_J588VgOmeY9sL198llcIIT91RmnbO_Y2oDnqqb5jXviyel9ocshD5j1c4hz3m_T3c74fDZWBe-mBBjbvDt7ubrvbb9fSyl4rkAAYy25rk6oFtdZVAvPf-Ai7KjPABE-Yz0etf7cMbOm_UOJZ_HmKX3KI-W8GWXXoL2XTEhsZ50qiDuk5A7R7iL9GT91jWIyrNrnhWlEfbLygjPmTuaTzNfrY8BsEQKKoL-sUIWooBsQ4ciWAqvUFVhB0iSB20C7HSqpdQMro">
+          <div class="absolute inset-0 bg-on-surface/15 flex items-center justify-center">
+            <div class="bg-white/90 px-5 py-2.5 rounded-full flex items-center gap-2 shadow-lg">
+              <span class="material-symbols-outlined text-primary text-base" style="font-variation-settings:'FILL' 1;">check_circle</span>
+              <span class="text-sm font-bold text-on-surface">Claimed by Sarah</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-5 md:p-6">
+          <h3 class="text-lg md:text-xl font-serif mb-2">Morning Ritual Espresso</h3>
+          <p class="text-sm text-on-surface-variant mb-5">High-pressure extraction for the perfect start to my American mornings.</p>
+          <button class="w-full bg-outline-variant/30 text-on-surface-variant/50 py-3 rounded-lg font-bold cursor-not-allowed text-sm" disabled>Already Gifted</button>
+        </div>
+      </div>
+
+      <!-- Bedding -->
+      <div class="registry-card bg-surface-container-lowest rounded-xl overflow-hidden group border border-outline-variant/10 hover:shadow-xl transition-all duration-500" data-category="essentials">
+        <div class="aspect-square overflow-hidden relative">
+          <img alt="Linen bedding set" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHMgTXzrEYNSBfdO4WSxr2wcPhwRgkSmnFGOKQgUYbbAJwU5uHPtGDfsqb8zypB9pnuOrF8xOOyIYxndX-F7zslNLfZIq9__JQWEPmM4vxBEc0ITUxW1uedQ1wuNJVJr4w1UeCgKU3L4l4GyWX68OK-S8zDcr5q2In-s7bvxiP_XK_zFgC-gf9RJlV8L8">
+          <div class="absolute top-3 right-3 bg-surface/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-primary">$150.00</div>
+        </div>
+        <div class="p-5 md:p-6">
+          <h3 class="text-lg md:text-xl font-serif mb-2">Organic Linen Bedding</h3>
+          <p class="text-sm text-on-surface-variant mb-5 line-clamp-2">Breathable, soft linen — Twin XL for the dorm room. Pennsylvania winters are cold.</p>
+          <button onclick="claimItem('Organic Linen Bedding', 150, this)" class="w-full bg-secondary-container text-on-secondary-container py-3 rounded-lg font-bold hover:bg-secondary-fixed transition-all flex items-center justify-center gap-2 text-sm">
+            Claim Gift <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Towels -->
+      <div class="registry-card bg-surface-container-lowest rounded-xl overflow-hidden group border border-outline-variant/10 hover:shadow-xl transition-all duration-500" data-category="essentials">
+        <div class="aspect-square overflow-hidden relative">
+          <img alt="Cotton towels" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6gL66kjrYCCZqNoGL5qLlkpDanZecW9xhvAEXM2QvxTxYvPrWKUGCptCzuTD1prkfh1wygAKro5Q-cw37GiaxnrBN4ALZ8vPJ547Lz7lkvvOZ3DGNkat1aUjjbHXXo7l8t20HASt3qSGR_6MUnPJ5i936QkcTMX6-1jXe7PzmUued2yCj888FBP5orNllhXD7Ft-nhEZ6paal3KetMozQE-V1PNYFTgkSXkMzf0Ls0B5jr0q0s8c4h6TC7oY8Py_2eZU9TaVRSDA">
+          <div class="absolute top-3 right-3 bg-surface/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-primary">$45.00</div>
+        </div>
+        <div class="p-5 md:p-6">
+          <h3 class="text-lg md:text-xl font-serif mb-2">Cloud-Touch Towel Set</h3>
+          <p class="text-sm text-on-surface-variant mb-5 line-clamp-2">Plush, high-absorbency organic cotton towels for a spa-like experience at home.</p>
+          <button onclick="claimItem('Cloud-Touch Towel Set', 45, this)" class="w-full bg-secondary-container text-on-secondary-container py-3 rounded-lg font-bold hover:bg-secondary-fixed transition-all flex items-center justify-center gap-2 text-sm">
+            Claim Gift <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Winter Jacket -->
+      <div class="registry-card bg-surface-container-lowest rounded-xl overflow-hidden group border border-outline-variant/10 hover:shadow-xl transition-all duration-500" data-category="clothing">
+        <div class="aspect-square overflow-hidden relative">
+          <img alt="Winter jacket" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMfpnXTz2mLxJ2mFbc_E78nTldRCoeMPnwAR2aqQpXXerQ7n0AaIOsu1TBZS6XCIfvrF1h9ATW3XP_rEX02zd4qz9XIhizxDTcTOPQqRFgJRPIM2GT9uPKB5xCwhIQ_dHhJl_I3CIep_oCLm2yDfuY_dbtDR3Cw-Cpz4fcwHrCeP5_LtEB73cs2ntHsFwj9eAK8JFSsMRk6LTudnRFW18r5GoV1sECpdITT6b8jx6MtlZ9fmqBOQLI3JP1GRiUZBYKOurwM6lptXg">
+          <div class="absolute top-3 right-3 bg-surface/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-primary">$120.00</div>
+        </div>
+        <div class="p-5 md:p-6">
+          <h3 class="text-lg md:text-xl font-serif mb-2">Winter Jacket</h3>
+          <p class="text-sm text-on-surface-variant mb-5 line-clamp-2">State College hits -10°C. I've never owned a real winter coat — this is the most critical item.</p>
+          <button onclick="claimItem('Winter Jacket', 120, this)" class="w-full bg-secondary-container text-on-secondary-container py-3 rounded-lg font-bold hover:bg-secondary-fixed transition-all flex items-center justify-center gap-2 text-sm">
+            Claim Gift <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /#registry-grid -->
+  </section>
+
+  <!-- ── HOW TO CONTRIBUTE ── -->
+  <section class="mt-16 md:mt-24 p-6 md:p-16 bg-surface-container rounded-3xl relative overflow-hidden" id="contribution-section">
+    <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
+
+      <!-- Payment methods -->
+      <div>
+        <h2 class="text-2xl md:text-3xl font-serif text-on-surface mb-3">How to Contribute</h2>
+        <p class="text-on-surface-variant text-sm md:text-base mb-7 leading-relaxed">
+          Pick an item above, choose how you'd like to help, and I'll take care of the rest. Click any item to get started.
+        </p>
+        <div class="space-y-4">
+          <div class="flex items-center gap-4 bg-white/70 rounded-xl p-4">
+            <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+              <span class="material-symbols-outlined text-primary">smartphone</span>
+            </div>
+            <div>
+              <p class="font-bold text-sm text-on-surface">bKash (Bangladesh)</p>
+              <p class="text-xs text-on-surface-variant">017XX-XXXXXX (Personal)</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 bg-white/70 rounded-xl p-4">
+            <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+              <span class="material-symbols-outlined text-primary">account_balance</span>
+            </div>
+            <div>
+              <p class="font-bold text-sm text-on-surface">ACH / Wire (USA)</p>
+              <p class="text-xs text-on-surface-variant">Chase Bank | Account ending in 4291</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 bg-white/70 rounded-xl p-4">
+            <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+              <span class="material-symbols-outlined text-primary">currency_exchange</span>
+            </div>
+            <div>
+              <p class="font-bold text-sm text-on-surface">NPSB / Bank Transfer</p>
+              <p class="text-xs text-on-surface-variant">Standard Chartered | Acc: 11223344556</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shipping addresses -->
+      <div>
+        <h2 class="text-2xl md:text-3xl font-serif text-on-surface mb-3">Shipping Addresses</h2>
+        <p class="text-on-surface-variant text-sm md:text-base mb-7 leading-relaxed">
+          Prefer to buy and ship the item directly? Use whichever address is easier for you.
+        </p>
+        <div class="space-y-4">
+          <div class="bg-white/70 rounded-xl p-5">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="material-symbols-outlined text-primary text-base">apartment</span>
+              <p class="font-bold text-sm text-on-surface">Bangladesh</p>
+            </div>
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+              House 42, Road 18, Block A<br>Banani, Dhaka 1213<br>
+              <span class="font-medium text-on-surface">Attn: Ananto (+880 1711-XXXXXX)</span>
+            </p>
+          </div>
+          <div class="bg-white/70 rounded-xl p-5">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="material-symbols-outlined text-primary text-base">home_pin</span>
+              <p class="font-bold text-sm text-on-surface">Penn State, USA</p>
+            </div>
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+              123 Graduate Circle, Apt 405<br>State College, PA 16801<br>
+              <span class="font-medium text-on-surface">United States</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="absolute top-0 right-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+  </section>
+
+  <!-- ── THANK YOU WALL ── -->
+  <section id="thank-you-wall" class="mt-16 md:mt-24">
+    <div class="text-center mb-10">
+      <span class="text-xs uppercase tracking-widest text-primary font-bold mb-3 block">From the heart</span>
+      <h2 class="text-2xl md:text-3xl font-serif text-on-surface mb-2">Thank You Wall</h2>
+      <p class="text-on-surface-variant text-sm max-w-md mx-auto">Everyone who's helped make this move possible. Thank you. 🙏</p>
+    </div>
+    <div id="thanks-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div id="thanks-loading" class="col-span-full flex items-center justify-center py-12 text-on-surface-variant gap-3">
+        <span class="material-symbols-outlined animate-spin text-primary">progress_activity</span> Loading…
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="w-full py-8 px-6 mt-0 border-t border-outline-variant/15">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+    <p class="text-stone-500 text-xs text-center md:text-left">© 2026. Built with love for this new chapter. 🇧🇩 → 🇺🇸</p>
+    <p class="text-stone-500 text-xs text-center">
+      Want to build one for yourself? Drop a line at
+      <a href="mailto:nazmulislamananto@gmail.com" class="text-primary hover:underline font-medium">nazmulislamananto@gmail.com</a>
+    </p>
+  </div>
+</footer>
+
+<!-- ── MOBILE BOTTOM NAV (hidden on desktop) ── -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-5 pt-3 bg-white/85 backdrop-blur-md rounded-t-2xl border-t border-stone-200/20 shadow-[0_-8px_24px_rgba(85,67,62,0.08)]">
+  <a href="index.html" class="flex flex-col items-center gap-0.5 text-[#C76D52] bg-[#f6ece6] rounded-xl px-4 py-1">
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">card_giftcard</span>
+    <span class="text-[10px] uppercase tracking-widest font-bold">Registry</span>
+  </a>
+  <a href="#contribution-section" class="flex flex-col items-center gap-0.5 text-stone-500 opacity-70">
+    <span class="material-symbols-outlined">volunteer_activism</span>
+    <span class="text-[10px] uppercase tracking-widest font-bold">Contribute</span>
+  </a>
+  <a href="#thank-you-wall" class="flex flex-col items-center gap-0.5 text-stone-500 opacity-70">
+    <span class="material-symbols-outlined">favorite</span>
+    <span class="text-[10px] uppercase tracking-widest font-bold">Thanks</span>
+  </a>
+  <a href="admin-gifts.html" class="flex flex-col items-center gap-0.5 text-stone-500 opacity-70">
+    <span class="material-symbols-outlined">admin_panel_settings</span>
+    <span class="text-[10px] uppercase tracking-widest font-bold">Admin</span>
+  </a>
+</nav>
+
+<!-- ── CONTRIBUTION MODAL ── -->
+<div id="modal-overlay" class="hidden fixed inset-0 z-[200] flex items-end md:items-center justify-center bg-black/50 backdrop-blur-sm" onclick="handleOverlayClick(event)">
+  <div class="bg-surface w-full md:max-w-md rounded-t-2xl md:rounded-2xl shadow-2xl max-h-[92vh] flex flex-col" onclick="event.stopPropagation()">
+
+    <!-- Modal header -->
+    <div class="flex items-start justify-between gap-3 px-5 py-4 border-b border-outline-variant/20 shrink-0">
+      <div>
+        <p id="modal-eyebrow" class="text-[10px] font-bold uppercase tracking-widest text-primary mb-0.5"></p>
+        <h3 id="modal-title" class="text-lg font-serif text-on-surface leading-snug"></h3>
+      </div>
+      <button onclick="closeModal()" class="p-1.5 rounded-full hover:bg-surface-container transition-colors mt-0.5 shrink-0">
+        <span class="material-symbols-outlined text-on-surface-variant">close</span>
+      </button>
+    </div>
+
+    <div class="overflow-y-auto">
+
+      <!-- Step 1: choose method (regular items only) -->
+      <div id="modal-step-method" class="hidden p-5">
+        <p class="text-sm text-on-surface-variant mb-4">How would you like to help?</p>
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="goToStep('gift')" class="flex flex-col items-center text-center p-5 rounded-xl border-2 border-outline-variant/30 hover:border-primary hover:bg-primary-fixed/20 transition-all gap-2 group">
+            <span class="material-symbols-outlined text-2xl text-on-surface-variant group-hover:text-primary transition-colors">local_shipping</span>
+            <div>
+              <p class="font-bold text-sm text-on-surface">Buy &amp; ship it</p>
+              <p class="text-[11px] text-on-surface-variant mt-0.5 leading-relaxed">Purchase and ship directly to me</p>
+            </div>
+          </button>
+          <button onclick="goToStep('money')" class="flex flex-col items-center text-center p-5 rounded-xl border-2 border-outline-variant/30 hover:border-primary hover:bg-primary-fixed/20 transition-all gap-2 group">
+            <span class="material-symbols-outlined text-2xl text-on-surface-variant group-hover:text-primary transition-colors">payments</span>
+            <div>
+              <p class="font-bold text-sm text-on-surface">Send the money</p>
+              <p class="text-[11px] text-on-surface-variant mt-0.5 leading-relaxed">Transfer the equivalent amount</p>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2a: buy & ship -->
+      <div id="modal-step-gift" class="hidden p-5">
+        <p class="text-sm text-on-surface-variant mb-4">Ship to whichever address is easier for you:</p>
+        <div class="space-y-3 mb-5">
+          <div class="bg-surface-container rounded-xl p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="material-symbols-outlined text-primary text-base">apartment</span>
+              <p class="text-xs font-bold uppercase tracking-wider text-on-surface">Bangladesh</p>
+            </div>
+            <p class="text-sm text-on-surface-variant leading-relaxed">House 42, Road 18, Block A<br>Banani, Dhaka 1213 — <span class="font-medium text-on-surface">Attn: Ananto</span></p>
+          </div>
+          <div class="bg-surface-container rounded-xl p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="material-symbols-outlined text-primary text-base">home_pin</span>
+              <p class="text-xs font-bold uppercase tracking-wider text-on-surface">Penn State, USA</p>
+            </div>
+            <p class="text-sm text-on-surface-variant leading-relaxed">123 Graduate Circle, Apt 405<br>State College, PA 16801, United States</p>
+          </div>
+        </div>
+        <form id="gift-form" class="space-y-3" onsubmit="submitContribution(event,'gift')">
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Your Name</label>
+            <input id="gift-name" class="w-full bg-surface-container-low border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary/20" placeholder="Rafi Islam" required type="text">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Email</label>
+            <input id="gift-email" class="w-full bg-surface-container-low border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary/20" placeholder="you@email.com" required type="email">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">A message (optional)</label>
+            <textarea id="gift-message" class="w-full bg-surface-container-low border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary/20" placeholder="Wishing you the best!" rows="2"></textarea>
+          </div>
+          <button type="submit" id="gift-submit-btn" class="w-full bg-primary text-on-primary py-3.5 rounded-lg font-bold text-sm hover:scale-[1.01] transition-all shadow-md">
+            Confirm — I'll handle shipping!
+          </button>
+        </form>
+      </div>
+
+      <!-- Step 2b: send money -->
+      <div id="modal-step-money" class="hidden p-5">
+        <div class="bg-surface-container rounded-xl p-4 mb-4 space-y-3">
+          <p class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">Send via</p>
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary">smartphone</span>
+            <div><p class="text-sm font-bold text-on-surface">bKash (Bangladesh)</p><p class="text-xs text-on-surface-variant">017XX-XXXXXX (Personal)</p></div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary">account_balance</span>
+            <div><p class="text-sm font-bold text-on-surface">ACH / Wire (USA)</p><p class="text-xs text-on-surface-variant">Chase Bank | Account ending in 4291</p></div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary">currency_exchange</span>
+            <div><p class="text-sm font-bold text-on-surface">NPSB / Bank Transfer</p><p class="text-xs text-on-surface-variant">Standard Chartered | Acc: 11223344556</p></div>
+          </div>
+        </div>
+        <form id="money-form" class="space-y-3" onsubmit="submitContribution(event,'money')">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Your Name</label>
+              <input id="money-name" class="w-full bg-surface-container-low border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary/20" placeholder="Rafi Islam" required type="text">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Email</label>
+              <input id="money-email" class="w-full bg-surface-container-low border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary/20" placeholder="you@email.com" required type="email">
+            </div>
+          </div>
+          <div id="money-amount-wrap">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Amount <span id="money-amount-hint" class="normal-case font-normal"></span></label>
+            <div class="relative">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">$</span>
+              <input id="money-amount" class="w-full pl-7 bg-surface-container-low border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary/20" placeholder="0.00" type="number" min="1" step="0.01" oninput="updateBdt()">
+            </div>
+            <p id="money-bdt" class="hidden mt-1.5 text-xs text-on-surface-variant text-right"></p>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Transaction ID or Reference</label>
+            <div class="flex gap-2">
+              <input id="money-txref" class="flex-1 bg-surface-container-low border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary/20" placeholder="Paste your transaction ID…" type="text">
+              <label class="bg-surface-container-high px-3 rounded-lg cursor-pointer hover:bg-outline-variant transition-colors flex items-center gap-1 text-xs font-bold whitespace-nowrap">
+                <span class="material-symbols-outlined text-sm">upload</span> Upload
+                <input class="hidden" type="file">
+              </label>
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Message (optional)</label>
+            <textarea id="money-message" class="w-full bg-surface-container-low border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary/20" placeholder="Wishing you the best!" rows="2"></textarea>
+          </div>
+          <button type="submit" id="money-submit-btn" class="w-full bg-primary text-on-primary py-3.5 rounded-lg font-bold text-sm hover:scale-[1.01] transition-all shadow-md">
+            I've sent it — Confirm!
+          </button>
+        </form>
+      </div>
+
+      <!-- Step 3: success -->
+      <div id="modal-step-success" class="hidden p-8 text-center">
+        <div class="w-16 h-16 bg-secondary-container rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1; color:#4A7C59;">check_circle</span>
+        </div>
+        <h4 class="text-xl font-serif mb-2">Thank you so much! 🙏</h4>
+        <p id="modal-success-msg" class="text-sm text-on-surface-variant mb-6 leading-relaxed"></p>
+        <button onclick="closeModal()" class="bg-primary text-on-primary px-8 py-3 rounded-lg font-bold text-sm">Done</button>
+      </div>
+
+    </div><!-- /overflow-y-auto -->
+  </div>
+</div>
+
+<script>
+  const { createClient } = supabase;
+  const db = createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
+
+  let allItems = [];
+  let activeFilter = 'all';
+  let modalItemId = null;
+  let modalItemTitle = null;
+
+  // ── Load & render items ──
+  async function loadItems() {
+    const { data, error } = await db.from('items').select('*').order('sort_order');
+    if (error || !data) {
+      document.getElementById('registry-grid').innerHTML =
+        '<p class="col-span-full text-center py-12 text-on-surface-variant">Could not load registry — please refresh.</p>';
+      return;
+    }
+    allItems = data;
+    renderCashBanner();
+    renderItems();
+  }
+
+  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function renderCashBanner() {
+    const cash = allItems.find(i => i.category === 'cash');
+    if (!cash) return;
+    document.getElementById('cash-gift-banner').innerHTML = `
+      <div class="w-full bg-gradient-to-r from-primary-fixed to-secondary-container rounded-2xl p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-outline-variant/10">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-white/70 rounded-xl flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-primary text-2xl">volunteer_activism</span>
+          </div>
+          <div>
+            <p class="font-bold text-on-surface">No specific item in mind?</p>
+            <p class="text-sm text-on-surface-variant mt-0.5">${esc(cash.description||'')}</p>
+          </div>
+        </div>
+        <button onclick="openModal('${esc(cash.id)}','Cash Gift','cash')" class="bg-primary text-on-primary px-5 py-2.5 rounded-lg font-bold text-sm hover:-translate-y-0.5 transition-all shadow-sm whitespace-nowrap shrink-0">
+          Send a Cash Gift
+        </button>
+      </div>`;
+  }
+
+  function renderItems() {
+    const grid = document.getElementById('registry-grid');
+    const nonCash = allItems.filter(i => i.category !== 'cash');
+    const filtered = activeFilter === 'all' ? nonCash : nonCash.filter(i => i.category === activeFilter);
+    if (filtered.length === 0) {
+      grid.innerHTML = '<p class="col-span-full text-center py-12 text-on-surface-variant">No items in this category yet.</p>';
+      return;
+    }
+    grid.innerHTML = filtered.map(item => {
+      if (item.is_group_gift) return renderGroupCard(item);
+      if (item.status === 'claimed') return renderClaimedCard(item);
+      return renderAvailableCard(item);
+    }).join('');
+  }
+
+  function renderGroupCard(item) {
+    const pct = item.goal_amount ? Math.round((item.raised_amount / item.goal_amount) * 100) : 0;
+    return `
+      <div class="registry-card col-span-2 bg-surface-container-low rounded-xl overflow-hidden flex flex-row group" data-category="${esc(item.category)}">
+        <div class="w-2/5 md:w-1/3 overflow-hidden shrink-0">
+          <img alt="${esc(item.title)}" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700" src="${esc(item.image_url||'')}">
+        </div>
+        <div class="flex-1 p-4 md:p-5 flex flex-col justify-center min-w-0">
+          <span class="text-[10px] text-primary font-bold uppercase tracking-widest mb-1">Group Gift</span>
+          <h3 class="text-base md:text-lg font-serif text-on-surface mb-1.5 leading-snug">${esc(item.title)}</h3>
+          <p class="text-on-surface-variant text-xs mb-3 leading-relaxed line-clamp-2">${esc(item.description||'')}</p>
+          <div class="space-y-1.5 mb-3">
+            <div class="flex items-baseline justify-between gap-2 text-xs font-semibold flex-wrap">
+              <span class="text-on-surface-variant uppercase tracking-wider">Progress</span>
+              <span class="text-primary">${fmtPrice(item.raised_amount||0)} <span class="text-on-surface-variant font-normal">/</span> ${fmtPrice(item.price||0)}</span>
+            </div>
+            <div class="w-full bg-secondary-fixed-dim/30 h-2 rounded-full overflow-hidden">
+              <div class="bg-primary h-full rounded-full" style="width:${pct}%"></div>
+            </div>
+          </div>
+          <button onclick="openModal('${esc(item.id)}','${esc(item.title)}','group')" class="bg-primary text-on-primary px-4 py-2 rounded-lg font-bold text-xs hover:-translate-y-0.5 transition-all self-start">
+            Contribute to this
+          </button>
+        </div>
+      </div>`;
+  }
+
+  function renderAvailableCard(item) {
+    return `
+      <div class="registry-card bg-surface-container-lowest rounded-xl overflow-hidden group border border-outline-variant/10 hover:shadow-xl transition-all duration-500" data-category="${esc(item.category)}">
+        <div class="aspect-[4/3] overflow-hidden relative">
+          <img alt="${esc(item.title)}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="${esc(item.image_url||'')}">
+          ${item.price ? `<div class="absolute top-2 right-2 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded-full text-xs font-bold text-primary">${fmtPrice(item.price)}</div>` : ''}
+        </div>
+        <div class="p-3 md:p-4">
+          <h3 class="text-sm md:text-base font-serif mb-1 leading-snug">${esc(item.title)}</h3>
+          <p class="text-xs text-on-surface-variant mb-3 line-clamp-2">${esc(item.description||'')}</p>
+          <button onclick="openModal('${esc(item.id)}','${esc(item.title)}','regular',${item.price||'null'})" class="w-full bg-secondary-container text-on-secondary-container py-2 rounded-lg font-bold hover:bg-secondary-fixed transition-all flex items-center justify-center gap-1.5 text-xs">
+            Claim Gift <span class="material-symbols-outlined text-xs">arrow_forward</span>
+          </button>
+        </div>
+      </div>`;
+  }
+
+  function renderClaimedCard(item) {
+    return `
+      <div class="registry-card bg-surface-container rounded-xl overflow-hidden filter grayscale-[0.25]" data-category="${esc(item.category)}">
+        <div class="aspect-[4/3] overflow-hidden relative">
+          <img alt="${esc(item.title)}" class="w-full h-full object-cover opacity-75" src="${esc(item.image_url||'')}">
+          <div class="absolute inset-0 bg-on-surface/15 flex items-center justify-center">
+            <div class="bg-white/90 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+              <span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings:'FILL' 1;">check_circle</span>
+              <span class="text-xs font-bold text-on-surface">Claimed${item.claimed_by ? ' by ' + esc(item.claimed_by) : ''}</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-3 md:p-4">
+          <h3 class="text-sm md:text-base font-serif mb-1 leading-snug">${esc(item.title)}</h3>
+          <p class="text-xs text-on-surface-variant mb-3">${esc(item.description||'')}</p>
+          <button class="w-full bg-outline-variant/30 text-on-surface-variant/50 py-2 rounded-lg font-bold cursor-not-allowed text-xs" disabled>Already Gifted</button>
+        </div>
+      </div>`;
+  }
+
+  // ── Filter ──
+  function filterRegistry(category) {
+    activeFilter = category;
+    renderItems();
+    document.querySelectorAll('[data-filter]').forEach(btn => btn.classList.toggle('active', btn.dataset.filter === category));
+  }
+
+  const BDT_RATE = 125; // fixed conversion rate
+  let activeCurrency = 'usd';
+
+  function setCurrency(cur) {
+    activeCurrency = cur;
+    document.getElementById('cur-usd').className = cur === 'usd'
+      ? 'px-3 py-2 rounded-lg text-xs font-bold transition-all text-on-surface bg-white shadow-sm'
+      : 'px-3 py-2 rounded-lg text-xs font-bold transition-all text-on-surface-variant';
+    document.getElementById('cur-bdt').className = cur === 'bdt'
+      ? 'px-3 py-2 rounded-lg text-xs font-bold transition-all text-on-surface bg-white shadow-sm'
+      : 'px-3 py-2 rounded-lg text-xs font-bold transition-all text-on-surface-variant';
+    renderItems();
+  }
+
+  function fmtPrice(usd) {
+    if (!usd) return '';
+    if (activeCurrency === 'bdt') return '৳' + Math.round(usd * BDT_RATE).toLocaleString('en-US');
+    return '$' + Number(usd).toFixed(2);
+  }
+
+  function updateBdt() {
+    const usd = parseFloat(document.getElementById('money-amount').value);
+    const el = document.getElementById('money-bdt');
+    if (usd > 0) {
+      el.textContent = '≈ ৳' + Math.round(usd * BDT_RATE).toLocaleString('en-IN') + ' BDT  (@ 125 BDT/$)';
+      el.classList.remove('hidden');
+    } else {
+      el.classList.add('hidden');
+    }
+  }
+
+  // ── Modal ──
+  function openModal(itemId, itemTitle, type, price) {
+    // type: 'regular' | 'group' | 'cash'
+    modalItemId = itemId;
+    modalItemTitle = itemTitle;
+    document.getElementById('modal-eyebrow').textContent =
+      type === 'cash' ? 'Cash Gift' : type === 'group' ? 'Group Contribution' : 'Claim This Item';
+    document.getElementById('modal-title').textContent = itemTitle;
+
+    const amountInput = document.getElementById('money-amount');
+    const amountHint  = document.getElementById('money-amount-hint');
+
+    if (type === 'regular' && price) {
+      // Pre-fill and lock to the item price
+      amountInput.value = price;
+      amountInput.readOnly = true;
+      amountInput.classList.add('opacity-60', 'cursor-not-allowed');
+      amountHint.textContent = '(fixed — item price)';
+      amountInput.required = true;
+    } else if (type === 'group') {
+      amountInput.value = '';
+      amountInput.readOnly = false;
+      amountInput.classList.remove('opacity-60', 'cursor-not-allowed');
+      amountHint.textContent = '(how much would you like to contribute?)';
+      amountInput.required = true;
+    } else {
+      amountInput.value = '';
+      amountInput.readOnly = false;
+      amountInput.classList.remove('opacity-60', 'cursor-not-allowed');
+      amountHint.textContent = type === 'cash' ? '' : '(optional)';
+      amountInput.required = type === 'cash';
+    }
+    updateBdt();
+
+    goToStep(type === 'regular' ? 'method' : 'money');
+    document.getElementById('modal-overlay').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.add('hidden');
+    document.body.style.overflow = '';
+    document.getElementById('gift-form').reset();
+    document.getElementById('money-form').reset();
+    modalItemId = null;
+    modalItemTitle = null;
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  }
+
+  function goToStep(step) {
+    ['method','gift','money','success'].forEach(s =>
+      document.getElementById('modal-step-' + s).classList.add('hidden')
+    );
+    document.getElementById('modal-step-' + step).classList.remove('hidden');
+  }
+
+  // ── Submit ──
+  async function submitContribution(e, method) {
+    e.preventDefault();
+    const btn = document.getElementById(method + '-submit-btn');
+    const origText = btn.textContent;
+    btn.textContent = 'Submitting…';
+    btn.disabled = true;
+
+    const payload = { method, item_id: modalItemId || null };
+
+    let email = '';
+    if (method === 'gift') {
+      payload.contributor_name = document.getElementById('gift-name').value.trim();
+      email = document.getElementById('gift-email').value.trim();
+      payload.contributor_email = email || null;
+      payload.message = document.getElementById('gift-message').value.trim() || null;
+    } else {
+      payload.contributor_name = document.getElementById('money-name').value.trim();
+      email = document.getElementById('money-email').value.trim();
+      payload.contributor_email = email || null;
+      payload.amount = parseFloat(document.getElementById('money-amount').value) || null;
+      payload.transaction_ref = document.getElementById('money-txref').value.trim() || null;
+      payload.message = document.getElementById('money-message').value.trim() || null;
+    }
+
+    const { error } = await db.from('contributions').insert(payload);
+    if (error) {
+      btn.textContent = origText;
+      btn.disabled = false;
+      alert('Something went wrong — please try again.');
+      return;
+    }
+
+    // Send confirmation email (best-effort — failure doesn't block UX)
+    sendConfirmationEmail(method, {
+      email,
+      name: payload.contributor_name,
+      itemTitle: modalItemTitle || 'Registry Item',
+      amount: payload.amount,
+    });
+
+    const successMsgs = {
+      gift:  "I'll keep an eye out for the package and thank you personally!",
+      money: "I'll verify your transfer and mark this as claimed.",
+    };
+    document.getElementById('modal-success-msg').textContent = successMsgs[method] || successMsgs.money;
+    goToStep('success');
+    btn.textContent = origText;
+    btn.disabled = false;
+  }
+
+  async function sendConfirmationEmail(method, { email, name, itemTitle, amount }) {
+    if (!email || !window.EMAILJS_PUBLIC_KEY) return;
+    const isGift = method === 'gift';
+    try {
+      await emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TEMPLATE_ID, {
+        to_email:      email,
+        to_name:       name,
+        item_title:    itemTitle || 'Cash Gift',
+        amount_line:   amount ? `Amount: $${Number(amount).toFixed(2)}` : '',
+        extra_section: isGift
+          ? `Please ship your gift to the address closest to you:\n\nFrom Bangladesh:\n${window.BD_MAILING_ADDRESS}\n\nFrom the USA:\n${window.US_MAILING_ADDRESS}`
+          : "I'll verify your transfer and mark the item as claimed shortly.",
+      });
+    } catch (_) { /* silent — email is best-effort */ }
+  }
+
+  // ── Thank You Wall ──
+  async function loadThanks() {
+    const { data, error } = await db
+      .from('contributions')
+      .select('*, items(title)')
+      .order('created_at', { ascending: false });
+
+    const grid = document.getElementById('thanks-grid');
+    if (error || !data || data.length === 0) {
+      grid.innerHTML = '<p class="col-span-full text-center py-10 text-on-surface-variant text-sm">Be the first to contribute! 🎁</p>';
+      return;
+    }
+
+    grid.innerHTML = data.map(c => {
+      const name   = esc(c.contributor_name || 'Anonymous');
+      const item   = c.items ? esc(c.items.title) : 'Cash Gift';
+      const msg    = c.message ? `<p class="text-sm text-on-surface-variant italic leading-relaxed mt-2">"${esc(c.message)}"</p>` : '';
+      const badge  = c.method === 'gift'
+        ? `<span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-secondary bg-secondary-container px-2 py-0.5 rounded-full"><span class="material-symbols-outlined text-xs">local_shipping</span>Shipped</span>`
+        : `<span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-primary bg-primary-fixed px-2 py-0.5 rounded-full"><span class="material-symbols-outlined text-xs">payments</span>Sent money</span>`;
+      const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+      // deterministic warm colour from name
+      const hues = [14, 28, 42, 200, 160, 260];
+      const hue  = hues[name.charCodeAt(0) % hues.length];
+      return `
+        <div class="bg-surface-container-low rounded-2xl p-5 flex flex-col gap-3 border border-outline-variant/10 hover:shadow-md transition-shadow">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style="background:hsl(${hue},55%,52%)">${initials}</div>
+            <div class="min-w-0">
+              <p class="font-bold text-on-surface text-sm leading-tight truncate">${name}</p>
+              <p class="text-xs text-on-surface-variant truncate">gifted <span class="text-on-surface font-medium">${item}</span></p>
+            </div>
+          </div>
+          ${msg}
+          <div class="flex items-center justify-between mt-auto pt-1">
+            ${badge}
+            ${c.amount ? `<span class="text-xs font-semibold text-primary">${fmtPrice(c.amount)}</span>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  loadItems();
+  loadThanks();
+</script>
+</body>
+</html>

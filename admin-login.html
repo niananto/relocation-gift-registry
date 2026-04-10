@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Login — Moving to the States!</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode:"class",
+    theme:{extend:{
+      colors:{
+        "primary":"#93452d","on-primary":"#ffffff","surface":"#fff8f5","on-surface":"#1f1b18",
+        "surface-container":"#f6ece6","surface-container-low":"#fcf2ec","surface-container-high":"#f0e6e1",
+        "on-surface-variant":"#55433e","outline-variant":"#dac1ba","primary-fixed":"#ffdbd1","error":"#ba1a1a",
+        "background":"#fff8f5"
+      },
+      fontFamily:{"headline":["Noto Serif"],"body":["Plus Jakarta Sans"]}
+    }}
+  }
+</script>
+<style>
+  body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  h1,h2,.serif { font-family: 'Noto Serif', serif; }
+</style>
+</head>
+<body class="bg-surface min-h-screen flex items-center justify-center p-4">
+
+  <div class="w-full max-w-sm">
+
+    <!-- Branding -->
+    <div class="text-center mb-10">
+      <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 mb-4">
+        <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings:'FILL' 1;">admin_panel_settings</span>
+      </div>
+      <h1 class="text-2xl font-serif italic text-on-surface">Moving to the States!</h1>
+      <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-primary mt-1">Registry Admin</p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-surface-container-low rounded-2xl p-8 shadow-sm border border-outline-variant/20">
+      <h2 class="text-lg font-serif mb-6 text-on-surface">Sign in to continue</h2>
+
+      <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+        <div class="space-y-1">
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Email</label>
+          <input id="f-email" type="email" required autocomplete="email"
+            class="w-full bg-surface-container border-none rounded-lg px-3 py-3 text-sm focus:ring-1 focus:ring-primary/30 placeholder:text-on-surface-variant/40"
+            placeholder="you@example.com"/>
+        </div>
+        <div class="space-y-1">
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Password</label>
+          <div class="relative">
+            <input id="f-password" type="password" required autocomplete="current-password"
+              class="w-full bg-surface-container border-none rounded-lg px-3 py-3 text-sm focus:ring-1 focus:ring-primary/30 placeholder:text-on-surface-variant/40 pr-10"
+              placeholder="••••••••"/>
+            <button type="button" onclick="togglePasswordVisibility()"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50 hover:text-on-surface-variant transition-colors">
+              <span id="pw-eye" class="material-symbols-outlined text-lg">visibility</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Error -->
+        <p id="login-error" class="hidden text-xs text-error bg-error/5 rounded-lg px-3 py-2"></p>
+
+        <button type="submit" id="login-btn"
+          class="w-full bg-primary text-on-primary py-3 rounded-lg font-semibold text-sm shadow hover:-translate-y-0.5 transition-all mt-2">
+          Sign In
+        </button>
+      </form>
+    </div>
+
+    <p class="text-center text-xs text-on-surface-variant/50 mt-6">
+      <a href="index.html" class="hover:text-primary transition-colors">← Back to public registry</a>
+    </p>
+
+  </div>
+
+<script>
+  const { createClient } = supabase;
+  const db = createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
+
+  // Already logged in? Skip straight to admin
+  db.auth.getSession().then(({ data: { session } }) => {
+    if (session) window.location.replace('admin-gifts.html');
+  });
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    const btn = document.getElementById('login-btn');
+    const errEl = document.getElementById('login-error');
+    btn.textContent = 'Signing in…';
+    btn.disabled = true;
+    errEl.classList.add('hidden');
+
+    const { error } = await db.auth.signInWithPassword({
+      email: document.getElementById('f-email').value.trim(),
+      password: document.getElementById('f-password').value,
+    });
+
+    if (error) {
+      errEl.textContent = error.message;
+      errEl.classList.remove('hidden');
+      btn.textContent = 'Sign In';
+      btn.disabled = false;
+      return;
+    }
+
+    window.location.replace('admin-gifts.html');
+  }
+
+  function togglePasswordVisibility() {
+    const input = document.getElementById('f-password');
+    const eye = document.getElementById('pw-eye');
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    eye.textContent = isHidden ? 'visibility_off' : 'visibility';
+  }
+</script>
+</body>
+</html>

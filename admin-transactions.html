@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Transactions — Moving to the States!</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode:"class",
+    theme:{extend:{
+      colors:{
+        "on-secondary-fixed":"#121f0b","surface-bright":"#fff8f5","on-secondary-fixed-variant":"#3d4b34",
+        "tertiary-fixed-dim":"#d6c4a7","surface-container-low":"#fcf2ec","secondary-container":"#d7e8c8",
+        "primary":"#93452d","on-error":"#ffffff","on-primary-fixed":"#3a0a00","on-secondary":"#ffffff",
+        "surface-container-lowest":"#ffffff","on-background":"#1f1b18","error-container":"#ffdad6",
+        "on-tertiary-fixed-variant":"#51452f","on-primary-fixed-variant":"#78301a","error":"#ba1a1a",
+        "background":"#fff8f5","surface-dim":"#e1d8d3","outline-variant":"#dac1ba","surface-tint":"#96472f",
+        "primary-fixed":"#ffdbd1","tertiary":"#685a42","surface-container-high":"#f0e6e1","surface":"#fff8f5",
+        "tertiary-fixed":"#f3e0c2","on-tertiary-fixed":"#241a07","surface-container":"#f6ece6",
+        "on-primary-container":"#fffbff","on-surface-variant":"#55433e","inverse-primary":"#ffb59f",
+        "surface-variant":"#eae1db","secondary-fixed-dim":"#bbccad","on-tertiary-container":"#fffbff",
+        "surface-container-highest":"#eae1db","inverse-on-surface":"#f9efe9","secondary-fixed":"#d7e8c8",
+        "outline":"#88726d","on-error-container":"#93000a","inverse-surface":"#342f2c","secondary":"#54634a",
+        "tertiary-container":"#817359","on-tertiary":"#ffffff","primary-container":"#b25c43",
+        "on-secondary-container":"#5a6950","on-primary":"#ffffff","on-surface":"#1f1b18","primary-fixed-dim":"#ffb59f"
+      },
+      borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},
+      fontFamily:{"headline":["Noto Serif"],"body":["Plus Jakarta Sans"],"label":["Plus Jakarta Sans"]}
+    }}
+  }
+</script>
+<style>
+  body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  h1,h2,h3,.serif { font-family: 'Noto Serif', serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-track{background:#fff8f5} ::-webkit-scrollbar-thumb{background:#dac1ba;border-radius:10px}
+</style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+
+<!-- ── MOBILE HEADER (hidden on md+) ── -->
+<header class="md:hidden fixed top-0 w-full z-50 bg-[#f4ede7] border-b border-outline-variant/20 flex items-center justify-between px-5 h-14">
+  <div class="flex items-center gap-3">
+    <span class="material-symbols-outlined text-primary cursor-pointer" onclick="toggleMobileSidebar()">menu</span>
+    <span class="font-serif text-base font-bold text-orange-900">Registry Admin</span>
+  </div>
+  <img src="https://github.com/niananto/academics/blob/gh-pages/images/ananto_dp_5.jpg?raw=true" class="w-8 h-8 rounded-full object-cover border border-white shadow-sm" alt="Ananto"/>
+</header>
+
+<!-- ── MOBILE SIDEBAR OVERLAY ── -->
+<div id="mobile-sidebar-overlay" class="md:hidden hidden fixed inset-0 bg-black/30 z-40 backdrop-blur-sm" onclick="toggleMobileSidebar()"></div>
+
+<!-- ── SIDEBAR (fixed desktop / slide-in mobile) ── -->
+<aside id="sidebar" class="fixed left-0 top-0 h-full flex flex-col p-6 space-y-4 bg-stone-100 w-64 z-50 transition-transform duration-300 -translate-x-full md:translate-x-0">
+  <div class="mb-6 px-2">
+    <h1 class="text-lg font-serif text-orange-900">Moving to the States!</h1>
+    <p class="text-[10px] uppercase tracking-[0.2em] text-on-surface-variant/60 font-medium mt-1">Registry Admin</p>
+  </div>
+  <div class="flex items-center space-x-3 mb-6 px-2 py-3 bg-surface-container-low rounded-xl">
+    <img alt="Ananto" class="w-10 h-10 rounded-full object-cover border-2 border-white"
+      src="https://github.com/niananto/academics/blob/gh-pages/images/ananto_dp_5.jpg?raw=true"/>
+    <div>
+      <p class="text-xs font-bold text-on-surface">Hi, Ananto</p>
+    </div>
+  </div>
+  <nav class="flex-1 space-y-1">
+    <a class="flex items-center space-x-3 px-4 py-3 text-stone-600 hover:bg-stone-200/50 rounded-lg transition-all" href="admin-gifts.html">
+      <span class="material-symbols-outlined">featured_play_list</span><span class="text-sm">Gift Management</span>
+    </a>
+    <a class="flex items-center space-x-3 px-4 py-3 bg-white text-orange-900 rounded-lg font-bold shadow-sm" href="admin-gifts.html#contributions">
+      <span class="material-symbols-outlined">payments</span><span class="text-sm">Transactions</span>
+    </a>
+    <a class="flex items-center space-x-3 px-4 py-3 text-stone-600 hover:bg-stone-200/50 rounded-lg transition-all" href="#">
+      <span class="material-symbols-outlined">settings</span><span class="text-sm">Settings</span>
+    </a>
+  </nav>
+  <a href="index.html" class="w-full py-3 px-4 bg-primary text-on-primary rounded-lg text-sm font-semibold text-center block hover:scale-[0.98] transition-all">
+    View Public Registry
+  </a>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="md:ml-64 pt-14 md:pt-0 pb-24 md:pb-0 min-h-screen">
+
+  <!-- Desktop page header -->
+  <div class="hidden md:flex justify-between items-end px-10 pt-10 pb-8 max-w-7xl">
+    <div>
+      <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-primary">Administration</span>
+      <h2 class="text-5xl font-serif italic text-on-surface mt-1">Transaction Registry</h2>
+      <p class="text-sm text-on-surface-variant mt-2">Real-time tracking of relocation contributions and gift claims.</p>
+    </div>
+    <button class="flex items-center space-x-2 bg-surface-container-low px-6 py-3 rounded-xl text-primary font-bold text-sm hover:bg-secondary-container transition-colors border border-outline-variant/30">
+      <span class="material-symbols-outlined text-[18px]">download</span>
+      <span>Export History</span>
+    </button>
+  </div>
+
+  <!-- Mobile page title -->
+  <div class="md:hidden flex justify-between items-center px-5 py-4">
+    <h2 class="text-2xl font-serif italic text-on-surface">Transactions</h2>
+    <button class="flex items-center gap-1.5 bg-surface-container text-primary px-3 py-2 rounded-lg text-xs font-bold border border-outline-variant/30">
+      <span class="material-symbols-outlined text-sm">download</span> Export
+    </button>
+  </div>
+
+  <div class="px-5 md:px-10 max-w-7xl">
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 gap-4 mb-8">
+      <div class="bg-surface-container p-5 md:p-6 rounded-xl relative overflow-hidden">
+        <p class="text-on-surface-variant text-xs uppercase tracking-wider mb-1">Total Raised</p>
+        <h3 class="text-2xl md:text-3xl font-serif text-primary">$12,450</h3>
+        <div class="mt-3">
+          <div class="h-1.5 w-full bg-secondary-fixed-dim rounded-full overflow-hidden">
+            <div class="h-full bg-primary rounded-full w-3/4"></div>
+          </div>
+          <p class="text-[10px] font-bold text-secondary uppercase tracking-tighter mt-1.5">75% of goal</p>
+        </div>
+      </div>
+      <div class="bg-surface-container p-5 md:p-6 rounded-xl">
+        <p class="text-on-surface-variant text-xs uppercase tracking-wider mb-1">Gifts Fulfilled</p>
+        <h3 class="text-2xl md:text-3xl font-serif text-orange-900">42</h3>
+        <p class="text-[10px] text-on-surface-variant mt-3 font-medium">Verified + pending claims</p>
+      </div>
+    </div>
+
+    <!-- Search bar (shared) -->
+    <div class="relative mb-5">
+      <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+        <span class="material-symbols-outlined text-on-surface-variant/50 text-[18px]">search</span>
+      </span>
+      <input id="search-input" oninput="filterTransactions(this.value)"
+        class="block w-full pl-11 pr-4 py-3 border border-outline-variant/30 rounded-xl text-sm focus:ring-primary focus:border-primary bg-surface-container-lowest placeholder:text-on-surface-variant/40"
+        placeholder="Search by contributor or gift…" type="text"/>
+    </div>
+
+    <!-- ── DESKTOP TABLE (hidden on mobile) ── -->
+    <div class="hidden md:block bg-surface-container-lowest rounded-xl border border-outline-variant/20 shadow-sm overflow-hidden mb-10">
+      <div class="px-8 py-5 flex justify-between items-center border-b border-outline-variant/10">
+        <h4 class="serif text-xl text-orange-900">Transaction History</h4>
+        <div class="flex items-center space-x-2 text-xs font-semibold text-on-surface-variant cursor-pointer hover:text-primary transition-colors">
+          <span class="material-symbols-outlined text-[16px]">filter_list</span>
+          <span>Sort: Date</span>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-surface-container-low/50">
+            <tr>
+              <th class="px-8 py-5 text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Contributor</th>
+              <th class="px-8 py-5 text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Gift Item</th>
+              <th class="px-8 py-5 text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Amount</th>
+              <th class="px-8 py-5 text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Status</th>
+              <th class="px-8 py-5 text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Date</th>
+            </tr>
+          </thead>
+          <tbody id="desktop-tbody" class="divide-y divide-stone-100">
+            <tr><td colspan="5" class="px-8 py-10 text-center text-on-surface-variant text-sm">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="px-8 py-5 bg-surface-container-low/10 flex justify-between items-center border-t border-outline-variant/10">
+        <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Showing 1–4 of 42 transactions</p>
+        <div class="flex space-x-2">
+          <button class="p-2 rounded-lg border border-outline-variant/30 hover:bg-surface-container-high transition-colors">
+            <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+          </button>
+          <button class="p-2 rounded-lg border border-outline-variant/30 hover:bg-surface-container-high transition-colors">
+            <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MOBILE TRANSACTION CARDS (hidden on desktop) ── -->
+    <div id="mobile-tx-list" class="md:hidden space-y-3 mb-6">
+      <p class="text-center text-on-surface-variant py-4 text-sm">Loading…</p>
+      <div id="mobile-empty" class="hidden text-center py-10 text-on-surface-variant text-sm">
+        No transactions match your search.
+      </div>
+    </div>
+
+    <!-- Mobile pagination hint -->
+    <div class="md:hidden flex justify-between items-center pb-2">
+      <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Showing 1–4 of 42</p>
+      <div class="flex gap-2">
+        <button class="p-2 rounded-lg border border-outline-variant/30 hover:bg-surface-container-high transition-colors">
+          <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+        </button>
+        <button class="p-2 rounded-lg border border-outline-variant/30 hover:bg-surface-container-high transition-colors">
+          <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /max-w-7xl -->
+
+  <!-- Footer (desktop only) -->
+  <footer class="hidden md:block mt-auto w-full py-10 px-10 bg-stone-100">
+    <div class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto">
+      <div class="mb-4 md:mb-0">
+        <span class="font-serif italic text-stone-900 text-base">Moving to the States!</span>
+        <p class="text-stone-500 text-[10px] tracking-tight font-body mt-1">© 2026. Registry Administration Portal.</p>
+      </div>
+      <div class="flex space-x-8">
+        <a class="text-stone-500 hover:text-orange-800 transition-colors text-xs font-body tracking-tight" href="index.html">Public Registry</a>
+        <a class="text-stone-500 hover:text-orange-800 transition-colors text-xs font-body tracking-tight" href="#">Transaction Terms</a>
+        <a class="text-stone-500 hover:text-orange-800 transition-colors text-xs font-body tracking-tight" href="#">Support</a>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<!-- ── MOBILE BOTTOM NAV ── -->
+<nav class="md:hidden fixed bottom-0 w-full bg-[#f4ede7] border-t border-outline-variant/20 flex justify-around items-center z-40 h-16">
+  <a href="admin-gifts.html" class="flex flex-col items-center gap-0.5 text-on-surface-variant">
+    <span class="material-symbols-outlined text-[22px]">featured_play_list</span>
+    <span class="text-[10px] font-semibold">Gifts</span>
+  </a>
+  <a href="admin-transactions.html" class="flex flex-col items-center gap-0.5 text-primary">
+    <span class="material-symbols-outlined text-[22px]" style="font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24">payments</span>
+    <span class="text-[10px] font-bold">Transactions</span>
+  </a>
+  <a href="index.html" class="flex flex-col items-center gap-0.5 text-on-surface-variant">
+    <span class="material-symbols-outlined text-[22px]">open_in_new</span>
+    <span class="text-[10px] font-semibold">Public</span>
+  </a>
+</nav>
+
+<script>
+  const { createClient } = supabase;
+  const db = createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
+
+  // ── Auth guard ──
+  (async () => {
+    const { data: { session } } = await db.auth.getSession();
+    if (!session) window.location.replace('admin-login.html');
+  })();
+
+  let allContributions = [];
+
+  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function initials(name) {
+    return (name||'?').split(/\s+/).map(w=>w[0]||'').join('').toUpperCase().slice(0,2);
+  }
+
+  function fmtDate(iso) {
+    return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+  }
+
+  const statusStyles = {
+    confirmed: 'bg-secondary-container text-on-secondary-container',
+    pending:   'bg-surface-variant text-on-surface-variant',
+    cancelled: 'bg-error-container text-on-error-container',
+  };
+
+  async function loadContributions() {
+    const { data, error } = await db
+      .from('contributions')
+      .select('*, items(title)')
+      .order('created_at', { ascending: false });
+    if (error || !data) return;
+    allContributions = data;
+    renderTable(data);
+    renderMobileCards(data);
+  }
+
+  function renderTable(contributions) {
+    const tbody = document.getElementById('desktop-tbody');
+    if (contributions.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="px-8 py-10 text-center text-on-surface-variant text-sm">No transactions yet.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = contributions.map(c => {
+      const name = c.contributor_name;
+      const itemTitle = c.items?.title || '—';
+      const badge = `<div class="inline-flex items-center px-3 py-1 rounded-full ${statusStyles[c.status]||statusStyles.pending} text-[11px] font-bold uppercase tracking-tighter">${esc(c.status)}</div>`;
+      return `
+        <tr data-name="${esc(name)}" data-item="${esc(itemTitle)}" class="hover:bg-surface-container-low/30 transition-colors">
+          <td class="px-8 py-6">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-secondary font-bold text-xs shrink-0">${esc(initials(name))}</div>
+              <span class="text-sm font-semibold text-orange-900">${esc(name)}</span>
+            </div>
+          </td>
+          <td class="px-8 py-6"><span class="text-sm font-medium text-stone-700">${esc(itemTitle)}</span></td>
+          <td class="px-8 py-6"><span class="text-sm font-bold ${c.amount ? 'text-primary' : 'text-stone-400'}">${c.amount ? '$' + Number(c.amount).toFixed(2) : '—'}</span></td>
+          <td class="px-8 py-6">${badge}</td>
+          <td class="px-8 py-6 text-sm text-stone-500 font-medium">${fmtDate(c.created_at)}</td>
+        </tr>`;
+    }).join('');
+  }
+
+  function renderMobileCards(contributions) {
+    const list = document.getElementById('mobile-tx-list');
+    const empty = document.getElementById('mobile-empty');
+    const cards = contributions.map(c => {
+      const name = c.contributor_name;
+      const itemTitle = c.items?.title || 'General Contribution';
+      const badge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full ${statusStyles[c.status]||statusStyles.pending} text-[10px] font-bold uppercase tracking-tight shrink-0">${esc(c.status)}</span>`;
+      return `
+        <div data-name="${esc(name)}" data-item="${esc(itemTitle)}" class="bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-4 flex items-start gap-3">
+          <div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-secondary font-bold text-sm shrink-0">${esc(initials(name))}</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <p class="text-sm font-bold text-orange-900 leading-tight">${esc(name)}</p>
+                <p class="text-xs text-on-surface-variant mt-0.5 truncate">${esc(itemTitle)}</p>
+              </div>
+              ${badge}
+            </div>
+            <div class="flex items-center justify-between mt-2.5">
+              <span class="text-base font-bold ${c.amount ? 'text-primary' : 'text-on-surface-variant'}">${c.amount ? '$' + Number(c.amount).toFixed(2) : '—'}</span>
+              <span class="text-[11px] text-on-surface-variant font-medium">${fmtDate(c.created_at)}</span>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+    list.innerHTML = cards || '';
+    empty.classList.toggle('hidden', contributions.length > 0);
+    if (!cards) list.appendChild(empty);
+  }
+
+  function filterTransactions(query) {
+    const q = query.toLowerCase();
+    const filtered = allContributions.filter(c =>
+      (c.contributor_name||'').toLowerCase().includes(q) ||
+      (c.items?.title||'').toLowerCase().includes(q)
+    );
+    renderTable(filtered);
+    renderMobileCards(filtered);
+  }
+
+  function toggleMobileSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobile-sidebar-overlay');
+    const isOpen = !sidebar.classList.contains('-translate-x-full');
+    sidebar.classList.toggle('-translate-x-full', isOpen);
+    overlay.classList.toggle('hidden', isOpen);
+  }
+
+  loadContributions();
+</script>
+</body>
+</html>
