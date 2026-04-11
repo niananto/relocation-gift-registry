@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — Moving to the States!</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script>
+    (async () => {
+      const db = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
+      const { data: { session } } = await db.auth.getSession();
+      window.location.replace(session ? 'admin-dashboard.html' : 'admin-login.html');
+    })();
+  </script>
+</head>
+<body></body>
+</html>

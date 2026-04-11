@@ -2,9 +2,8 @@
 <html class="light" lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta http-equiv="refresh" content="0;url=admin-dashboard.html"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Gift Management — Moving to the States!</title>
+<title>Admin Dashboard — Moving to the States!</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
@@ -673,9 +672,9 @@
     }
 
     // URL hash
-    if (isContribs) history.replaceState(null, '', 'admin-gifts.html#contributions');
-    else if (isAddNew) history.replaceState(null, '', 'admin-gifts.html#add-new');
-    else history.replaceState(null, '', 'admin-gifts.html');
+    if (isContribs) history.replaceState(null, '', 'admin-dashboard.html#contributions');
+    else if (isAddNew) history.replaceState(null, '', 'admin-dashboard.html#add-new');
+    else history.replaceState(null, '', 'admin-dashboard.html');
   }
 
   function switchTab(tab) { switchView(tab); }

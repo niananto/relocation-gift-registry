@@ -87,7 +87,7 @@
 
   // Already logged in? Skip straight to admin
   db.auth.getSession().then(({ data: { session } }) => {
-    if (session) window.location.replace('admin-gifts.html');
+    if (session) window.location.replace('admin-dashboard.html');
   });
 
   async function handleLogin(e) {
@@ -111,7 +111,7 @@
       return;
     }
 
-    window.location.replace('admin-gifts.html');
+    window.location.replace('admin-dashboard.html');
   }
 
   function togglePasswordVisibility() {
