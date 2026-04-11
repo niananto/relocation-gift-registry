@@ -88,31 +88,31 @@
 
   <!-- ── HERO ── -->
   <section class="mb-16 md:mb-24 md:grid md:grid-cols-12 md:gap-12 md:items-center">
-    <!-- Mobile: top row = label + heading + photo side by side -->
-    <div class="md:col-span-7">
-      <span class="text-xs uppercase tracking-widest text-primary font-bold mb-2 md:mb-3 block">New Chapter Begins</span>
-      <!-- On mobile: heading and photo sit side by side -->
-      <div class="flex items-start gap-4 mb-3 md:block">
-        <h1 class="flex-1 text-3xl md:text-7xl font-serif italic text-on-surface leading-tight md:mb-5">Be a part of my relocation journey</h1>
-        <!-- Photo: only visible here on mobile; hidden on md+ (shown in right col instead) -->
-        <div class="w-24 shrink-0 md:hidden relative">
-          <div class="w-full aspect-[4/5] rounded-xl overflow-hidden shadow-2xl">
-            <img alt="Ananto — moving to Penn State" class="w-full h-full object-cover"
-              src="https://github.com/niananto/academics/blob/gh-pages/images/ananto_dp_5.jpg?raw=true">
-          </div>
+    <!-- Left col: on mobile, flex row so photo sits beside all text content -->
+    <div class="md:col-span-8 flex gap-4 md:block">
+      <!-- Text block -->
+      <div class="flex-1">
+        <span class="text-xs uppercase tracking-widest text-primary font-bold mb-2 md:mb-3 block">New Chapter Begins</span>
+        <h1 class="text-2xl md:text-7xl font-serif italic text-on-surface leading-tight mb-2 md:mb-5">Be a part of my relocation journey</h1>
+        <p class="text-sm md:text-lg text-on-surface-variant md:max-w-xl leading-relaxed mb-5 md:mb-7">
+          This fall, I'm moving from Dhaka to State College, PA to start my PhD in Computer Science at Penn State. Pick something from the list and help me land on my feet.
+        </p>
+        <div class="flex flex-wrap items-center gap-2 md:gap-3">
+          <a href="#registry" class="bg-primary text-on-primary px-4 md:px-7 py-2 md:py-3 rounded-lg font-semibold hover:bg-primary-container transition-all hover:-translate-y-0.5 text-xs md:text-base whitespace-nowrap">Browse Registry</a>
+          <a href="#contribution-section" class="bg-secondary-container text-on-secondary-container px-4 md:px-7 py-2 md:py-3 rounded-lg font-semibold hover:bg-secondary-fixed transition-all hover:-translate-y-0.5 text-xs md:text-base whitespace-nowrap">How to Contribute</a>
+          <a href="#thank-you-wall" class="bg-surface-container text-on-surface px-4 md:px-7 py-2 md:py-3 rounded-lg font-semibold hover:bg-surface-container-high transition-all hover:-translate-y-0.5 text-xs md:text-base whitespace-nowrap">Thank You Wall</a>
         </div>
       </div>
-      <p class="text-sm md:text-lg text-on-surface-variant md:max-w-xl leading-relaxed mb-5 md:mb-7">
-        This fall, I'm moving from Dhaka to State College, PA to start my PhD in Computer Science at Penn State. Pick something from the list and help me land on my feet.
-      </p>
-      <div class="flex flex-wrap items-center gap-2 md:gap-3">
-        <a href="#registry" class="bg-primary text-on-primary px-4 md:px-7 py-2 md:py-3 rounded-lg font-semibold hover:bg-primary-container transition-all hover:-translate-y-0.5 text-xs md:text-base whitespace-nowrap">Browse Registry</a>
-        <a href="#contribution-section" class="bg-secondary-container text-on-secondary-container px-4 md:px-7 py-2 md:py-3 rounded-lg font-semibold hover:bg-secondary-fixed transition-all hover:-translate-y-0.5 text-xs md:text-base whitespace-nowrap">How to Contribute</a>
-        <a href="#thank-you-wall" class="bg-surface-container text-on-surface px-4 md:px-7 py-2 md:py-3 rounded-lg font-semibold hover:bg-surface-container-high transition-all hover:-translate-y-0.5 text-xs md:text-base whitespace-nowrap">Thank You Wall</a>
+      <!-- Photo: mobile only (beside all text) -->
+      <div class="w-28 shrink-0 md:hidden">
+        <div class="w-full aspect-[4/5] rounded-xl overflow-hidden shadow-2xl">
+          <img alt="Ananto — moving to Penn State" class="w-full h-full object-cover"
+            src="https://github.com/niananto/academics/blob/gh-pages/images/ananto_dp_5.jpg?raw=true">
+        </div>
       </div>
     </div>
-    <!-- Photo: only on desktop (md+) -->
-    <div class="hidden md:flex md:col-span-5 relative justify-center">
+    <!-- Photo: desktop only (smaller — col-span-4 out of 12) -->
+    <div class="hidden md:flex md:col-span-4 relative justify-center">
       <div class="w-full aspect-[4/5] rounded-xl overflow-hidden shadow-2xl relative z-10 transform md:rotate-3 hover:rotate-0 transition-transform duration-500">
         <img alt="Ananto — moving to Penn State" class="w-full h-full object-cover"
           src="https://github.com/niananto/academics/blob/gh-pages/images/ananto_dp_5.jpg?raw=true">
