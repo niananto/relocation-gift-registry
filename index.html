@@ -88,33 +88,33 @@
 
   <!-- ── HERO ── -->
   <section class="mb-16 md:mb-24 md:grid md:grid-cols-12 md:gap-12 md:items-center">
-    <!-- Left col: on mobile, flex row so photo sits beside all text content -->
-    <div class="md:col-span-8 flex gap-4 md:block">
-      <!-- Text block -->
-      <div class="flex-1">
-        <span class="text-xs uppercase tracking-widest text-primary font-bold mb-2 md:mb-3 block">New Chapter Begins</span>
-        <h1 class="text-2xl md:text-7xl font-serif italic text-on-surface leading-tight mb-2 md:mb-5">Be a part of my relocation journey</h1>
-        <p class="text-sm md:text-lg text-on-surface-variant md:max-w-xl leading-relaxed mb-5 md:mb-7">
-          This fall, I'm moving from Dhaka to State College, PA to start my PhD in Computer Science at Penn State. Pick something from the list and help me land on my feet.
-        </p>
-        <div class="flex items-center gap-1.5 md:gap-3 w-full md:w-auto">
-          <a href="#registry" class="flex-1 md:flex-none text-center bg-primary text-on-primary px-2.5 md:px-7 py-2 md:py-3 rounded-lg font-semibold hover:bg-primary-container transition-all hover:-translate-y-0.5 text-xs md:text-base whitespace-nowrap">
-            <span class="md:hidden">Browse</span><span class="hidden md:inline">Browse Registry</span>
-          </a>
-          <a href="#contribution-section" class="flex-1 md:flex-none text-center bg-secondary-container text-on-secondary-container px-2.5 md:px-7 py-2 md:py-3 rounded-lg font-semibold hover:bg-secondary-fixed transition-all hover:-translate-y-0.5 text-xs md:text-base whitespace-nowrap">
-            <span class="md:hidden">Contribute</span><span class="hidden md:inline">How to Contribute</span>
-          </a>
-          <a href="#thank-you-wall" class="flex-1 md:flex-none text-center bg-surface-container text-on-surface px-2.5 md:px-7 py-2 md:py-3 rounded-lg font-semibold hover:bg-surface-container-high transition-all hover:-translate-y-0.5 text-xs md:text-base whitespace-nowrap">
-            <span class="md:hidden">Thanks</span><span class="hidden md:inline">Thank You Wall</span>
-          </a>
+    <div class="md:col-span-8">
+      <span class="text-xs uppercase tracking-widest text-primary font-bold mb-2 md:mb-3 block">New Chapter Begins</span>
+      <!-- Mobile: h1 + photo side by side (vertically centered); desktop: h1 alone -->
+      <div class="flex items-center gap-4 mb-2 md:block">
+        <h1 class="flex-1 text-2xl md:text-7xl font-serif italic text-on-surface leading-tight md:mb-5">Be a part of my relocation journey</h1>
+        <!-- Photo: mobile only -->
+        <div class="w-28 shrink-0 md:hidden">
+          <div class="w-full aspect-[4/5] rounded-xl overflow-hidden shadow-2xl">
+            <img alt="Ananto — moving to Penn State" class="w-full h-full object-cover"
+              src="https://github.com/niananto/academics/blob/gh-pages/images/ananto_dp_5.jpg?raw=true">
+          </div>
         </div>
       </div>
-      <!-- Photo: mobile only (beside all text) -->
-      <div class="w-28 shrink-0 md:hidden">
-        <div class="w-full aspect-[4/5] rounded-xl overflow-hidden shadow-2xl">
-          <img alt="Ananto — moving to Penn State" class="w-full h-full object-cover"
-            src="https://github.com/niananto/academics/blob/gh-pages/images/ananto_dp_5.jpg?raw=true">
-        </div>
+      <!-- Paragraph and buttons: full width on mobile -->
+      <p class="text-sm md:text-lg text-on-surface-variant md:max-w-xl leading-relaxed mb-5 md:mb-7">
+        This fall, I'm moving from Dhaka to State College, PA to start my PhD in Computer Science at Penn State. Pick something from the list and help me land on my feet.
+      </p>
+      <div class="flex items-center gap-1.5 md:gap-3 w-full md:w-auto">
+        <a href="#registry" class="flex-1 md:flex-none text-center bg-primary text-on-primary px-2.5 md:px-7 py-2 md:py-3 rounded-lg font-semibold hover:bg-primary-container transition-all hover:-translate-y-0.5 text-xs md:text-base whitespace-nowrap">
+          <span class="md:hidden">Browse</span><span class="hidden md:inline">Browse Registry</span>
+        </a>
+        <a href="#contribution-section" class="flex-1 md:flex-none text-center bg-secondary-container text-on-secondary-container px-2.5 md:px-7 py-2 md:py-3 rounded-lg font-semibold hover:bg-secondary-fixed transition-all hover:-translate-y-0.5 text-xs md:text-base whitespace-nowrap">
+          <span class="md:hidden">Contribute</span><span class="hidden md:inline">How to Contribute</span>
+        </a>
+        <a href="#thank-you-wall" class="flex-1 md:flex-none text-center bg-surface-container text-on-surface px-2.5 md:px-7 py-2 md:py-3 rounded-lg font-semibold hover:bg-surface-container-high transition-all hover:-translate-y-0.5 text-xs md:text-base whitespace-nowrap">
+          <span class="md:hidden">Thanks</span><span class="hidden md:inline">Thank You Wall</span>
+        </a>
       </div>
     </div>
     <!-- Photo: desktop only (smaller — col-span-4 out of 12) -->
